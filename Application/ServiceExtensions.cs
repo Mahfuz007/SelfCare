@@ -6,7 +6,7 @@ namespace Application
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection ConfiguareApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             var assembly = typeof(ServiceExtensions).Assembly;
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
