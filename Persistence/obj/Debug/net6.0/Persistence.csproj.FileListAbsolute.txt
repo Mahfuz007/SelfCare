@@ -1,0 +1,5 @@
+F:\My Works\New folder\SelfCare\Persistence\obj\Debug\net6.0\Persistence.csproj.AssemblyReference.cache
+F:\My Works\New folder\SelfCare\Persistence\obj\Debug\net6.0\Persistence.GeneratedMSBuildEditorConfig.editorconfig
+F:\My Works\New folder\SelfCare\Persistence\obj\Debug\net6.0\Persistence.AssemblyInfoInputs.cache
+F:\My Works\New folder\SelfCare\Persistence\obj\Debug\net6.0\Persistence.AssemblyInfo.cs
+F:\My Works\New folder\SelfCare\Persistence\obj\Debug\net6.0\Persistence.csproj.CoreCompileInputs.cache

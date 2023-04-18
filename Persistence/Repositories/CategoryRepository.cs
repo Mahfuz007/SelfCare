@@ -11,7 +11,7 @@ namespace Persistence.Repositories
 {
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
-        public CategoryRepository(DataContext context) : base(context)
+        public CategoryRepository(MongoDbSettings context) : base(context)
         {
         }
     }

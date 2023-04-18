@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
+    [BsonCollection("Category")]
     public sealed class Category: BaseEntity
     {
         public string Name { get; set; }

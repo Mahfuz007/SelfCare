@@ -186,6 +186,10 @@
               "target": "Package",
               "version": "[7.0.0, )"
             },
+            "Microsoft.Extensions.Options.ConfigurationExtensions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[2.19.1, )"
