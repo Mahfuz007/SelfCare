@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "CDWfMBBV0ZsGTo4OZiUrFsLRIVs/j5orJa7Y9zjvZgK7Ijute9seYvQCq8wnTUK364IldCc1MzqoUhQ3J4UG3w==",
+  "dgSpecHash": "b0uVFM0+046nE+WbEkntmjbu3wUY21Z0XSNTn7C2qv6tEZ43r405JrpiO73YyAGEXBgVbM9DEG2bT2IFrxcJMg==",
   "success": true,
   "projectFilePath": "F:\\My Works\\New folder\\SelfCare\\Persistence\\Persistence.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mahfuz\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\mahfuz\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",

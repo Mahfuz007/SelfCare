@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "GI6QLLHkmGi1PD+cQRdXjqoU2jo5ghU7DGK/URCU7wxEzAxWEhPwlImDjrHeynvtdJuV9gos8Pk+ZFuzRM2msw==",
+  "dgSpecHash": "DAnNscaxq8f8us2p57qbvMgmpMc4RGahzSOr3ggImqZG+rY21kCaCVlh0coheMWMDa1CrkCKbdhFNma/d/8edg==",
   "success": true,
   "projectFilePath": "F:\\My Works\\New folder\\SelfCare\\WebApi\\WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mahfuz\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\mahfuz\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",

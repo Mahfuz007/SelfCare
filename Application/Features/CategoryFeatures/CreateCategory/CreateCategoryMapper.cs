@@ -13,7 +13,7 @@ namespace Application.Features.CategoryFeatures.CreateCategory
         public CreateCategoryMapper()
         {
             CreateMap<CreateCategoryRequest, Category>();
-            CreateMap<CreateCategoryResponse, Category>();
+            CreateMap<Category, CreateCategoryResponse>();
         }
     }
 }

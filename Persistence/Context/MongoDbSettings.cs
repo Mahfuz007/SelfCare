@@ -1,7 +1,4 @@
-﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace Persistence.Context
+﻿namespace Persistence.Context
 {
     public class MongoDbSettings: IMongoDbSettings
     {
