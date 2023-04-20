@@ -651,6 +651,9 @@
       "Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "MongoDB.Bson": "2.19.1"
+        },
         "compile": {
           "bin/placeholder/Domain.dll": {}
         },

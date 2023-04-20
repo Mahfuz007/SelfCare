@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "41BLdx+Eod5tFS1vFfpNW7y1j6SPmlnCuXOwLKOPd0DEBYVlPW1i2vteT57WOPHGKjOLS844O8fYOvnVxyJD7w==",
+  "dgSpecHash": "pEHtbUjONd2Fc/3DBDBo4dTTmAsDq6t5xFWiMxNFGNighlw+3dQiZPJ7dj+1saIHqecn6Hd3T7m5PgdcM6l9Ag==",
   "success": true,
   "projectFilePath": "F:\\My Works\\New folder\\SelfCare\\Application\\Application.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,7 @@
     "C:\\Users\\mahfuz\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
+    "C:\\Users\\mahfuz\\.nuget\\packages\\mongodb.bson\\2.19.1\\mongodb.bson.2.19.1.nupkg.sha512",
     "C:\\Users\\mahfuz\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
   "logs": []
