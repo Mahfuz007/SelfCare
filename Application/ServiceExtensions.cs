@@ -1,5 +1,9 @@
-﻿using FluentValidation;
+﻿using Application.Common;
+using Application.Features.CategoryFeatures.CreateCategory;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Application
 {
@@ -7,10 +11,10 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            var assembly = typeof(ServiceExtensions).Assembly;
-            services.AddAutoMapper(assembly);
-            services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
-            services.AddValidatorsFromAssembly(assembly);
+            services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(ServiceExtensions).Assembly));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehaviour<,>));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>(ServiceLifetime.Singleton);
             return services;
         }
     }

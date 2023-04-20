@@ -15,11 +15,11 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CreateCategoryResponse>> Create(CreateCategoryRequest request, CancellationToken cancellationToken)
+        [HttpPost("Create Category")]
+        public async Task<ActionResult<CreateCategoryResponse>> CreateCategory([FromBody] CreateCategoryRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
-            return response;
+            return Ok(response);
         }
     }
 }

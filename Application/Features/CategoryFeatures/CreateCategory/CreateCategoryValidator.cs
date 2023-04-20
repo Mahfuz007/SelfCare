@@ -11,10 +11,10 @@ namespace Application.Features.CategoryFeatures.CreateCategory
     {
         public CreateCategoryValidator()
         {
-            RuleFor(x => x.category.Name).NotEmpty().MinimumLength(3).MaximumLength(20);
-            RuleFor(x => x.category.ItemId).NotEmpty();
-            RuleFor(x => x.category.IsExpense).NotEmpty();
-            RuleFor(x => x.category.IsDefault).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty().MinimumLength(3).MaximumLength(20);
+            RuleFor(x => x.ItemId).NotEmpty();
+            RuleFor(x => x.IsExpense).NotEmpty();
+            RuleFor(x => x.IsDefault).NotEmpty();
         }
     }
 }
