@@ -29,6 +29,8 @@ namespace Application.Features.CategoryFeatures.CreateCategory
                 throw new BadRequestException(validationResult.ToString());
             }
             var category = _mapper.Map<Category>(request);
+            category.CreatedDate = DateTime.UtcNow;
+            category.LastModifiedDate = DateTime.UtcNow;
 
             await _categoryRepository.InsertOneAsync(category);
             return _mapper.Map<CreateCategoryResponse>(category);

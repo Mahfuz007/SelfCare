@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Common
 {
     public abstract class BaseEntity
     {
+        [BsonId]
         public string ItemId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
