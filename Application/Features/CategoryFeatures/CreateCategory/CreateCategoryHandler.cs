@@ -28,6 +28,8 @@ namespace Application.Features.CategoryFeatures.CreateCategory
                 Console.WriteLine(validationResult);
                 throw new BadRequestException(validationResult.ToString());
             }
+            var checkExistance = await _categoryRepository.BeAnExistingCategory(request.ItemId);
+            if (checkExistance) throw new BadRequestException("Item Id already exists!!!");
             var category = _mapper.Map<Category>(request);
             category.CreatedDate = DateTime.UtcNow;
             category.LastModifiedDate = DateTime.UtcNow;
