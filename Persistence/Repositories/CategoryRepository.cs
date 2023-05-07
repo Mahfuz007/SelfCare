@@ -9,5 +9,11 @@ namespace Persistence.Repositories
         public CategoryRepository(IMongoDbSettings context) : base(context)
         {
         }
+
+        public async Task<bool> BeAnExistingCategory(string id)
+        {
+            var result = await FindByIdAsync(id);
+            return result is not null;
+        }
     }
 }
