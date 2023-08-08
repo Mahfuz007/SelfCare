@@ -9,13 +9,11 @@ namespace Application.Features.CategoryFeatures.CreateCategory
 {
     public sealed class CreateCategoryHandler : IRequestHandler<CreateCategoryRequest, CreateCategoryResponse>
     {
-        private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IValidator<CreateCategoryRequest> _validator;
 
-        public CreateCategoryHandler(IMapper mapper, ICategoryRepository categoryRepository, IValidator<CreateCategoryRequest> validator)
+        public CreateCategoryHandler(ICategoryRepository categoryRepository, IValidator<CreateCategoryRequest> validator)
         {
-            _mapper = mapper;
             _categoryRepository = categoryRepository;
             _validator = validator;
         }
@@ -28,14 +26,8 @@ namespace Application.Features.CategoryFeatures.CreateCategory
                 Console.WriteLine(validationResult);
                 throw new BadRequestException(validationResult.ToString());
             }
-            var checkExistance = await _categoryRepository.BeAnExistingCategory(request.ItemId);
-            if (checkExistance) throw new BadRequestException("Item Id already exists!!!");
-            var category = _mapper.Map<Category>(request);
-            category.CreatedDate = DateTime.UtcNow;
-            category.LastModifiedDate = DateTime.UtcNow;
-
-            await _categoryRepository.InsertOneAsync(category);
-            return _mapper.Map<CreateCategoryResponse>(category);
+            
+            return await _categoryRepository.CreateCategory(request);
         }
     }
 }

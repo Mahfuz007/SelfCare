@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.UpdateCategory;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ namespace Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehaviour<,>));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>(ServiceLifetime.Singleton);
+            services.AddValidatorsFromAssemblyContaining<UpdateCategoryValidator>(ServiceLifetime.Singleton);
             return services;
         }
     }

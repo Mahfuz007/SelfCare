@@ -14,7 +14,8 @@ namespace Persistence
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
             services.AddSingleton<IMongoDbSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
             return services;
         }
     }
