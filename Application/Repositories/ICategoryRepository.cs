@@ -1,4 +1,5 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
 
 namespace Application.Repositories
@@ -7,6 +8,7 @@ namespace Application.Repositories
     {
         Task<CreateCategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest);
         Task<UpdateCategoryResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest);
-        Task<bool> BeAnExistingCategory(string id); 
+        Task<bool> BeAnExistingCategory(string id);
+        Task<GetCategoryResponse> GetCategory(string categoryId);
     }
 }

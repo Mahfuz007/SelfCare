@@ -1,4 +1,5 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
 using Application.Repositories;
 using AutoMapper;
@@ -31,6 +32,12 @@ namespace Persistence.Repositories
             await _baseRepository.InsertOneAsync(category);
 
             return _mapper.Map<CreateCategoryResponse>(category);
+        }
+
+        public async Task<GetCategoryResponse> GetCategory(string categoryId)
+        {
+            var category = await _baseRepository.FindByIdAsync(categoryId);
+            return _mapper.Map<GetCategoryResponse>(category);
         }
 
         public async Task<UpdateCategoryResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest)

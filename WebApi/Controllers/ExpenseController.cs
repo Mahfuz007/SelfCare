@@ -1,4 +1,5 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,12 @@ namespace WebApi.Controllers
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
+        }
+
+        [HttpGet("GetCategory")]
+        public async Task<ActionResult<GetCategoryResponse>> GetCategory([FromQuery] GetCategoryRequest request, CancellationToken cancellation)
+        {
+            return await _mediator.Send(request, cancellation);
         }
     }
 }
