@@ -1,9 +1,11 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.CategoryFeatures.GetAllCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
+using MongoDB.Driver;
 using Persistence.Context;
 
 namespace Persistence.Repositories
@@ -32,6 +34,13 @@ namespace Persistence.Repositories
             await _baseRepository.InsertOneAsync(category);
 
             return _mapper.Map<CreateCategoryResponse>(category);
+        }
+
+        public async Task<List<GetAllCategoryResponse>> GetAllCategory()
+        {
+            var filter = Builders<Category>.Filter.Empty;
+            var categories = await _baseRepository.FindAllAsync(filter);
+            return _mapper.Map<List<GetAllCategoryResponse>>(categories);
         }
 
         public async Task<GetCategoryResponse> GetCategory(string categoryId)

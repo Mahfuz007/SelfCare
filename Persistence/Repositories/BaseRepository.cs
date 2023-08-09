@@ -121,5 +121,15 @@ namespace Persistence.Repositories
             var filter = Builders<T>.Filter.Eq(doc => doc.ItemId, document.ItemId);
             await _collection.FindOneAndReplaceAsync(filter, document);
         }
+
+        public List<T> FindAll(FilterDefinition<T> filterExpression)
+        {
+            return  _collection.Find(filterExpression).ToList();
+        }
+
+        public async Task<List<T>> FindAllAsync(FilterDefinition<T> filterExpression)
+        {
+            return await _collection.Find(filterExpression).ToListAsync();
+        }
     }
 }

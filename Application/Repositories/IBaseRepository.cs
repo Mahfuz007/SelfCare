@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using MongoDB.Driver;
 using System.Linq.Expressions;
 
 namespace Application.Repositories
@@ -11,6 +12,8 @@ namespace Application.Repositories
         Task<T> FindOneAsync (Expression<Func<T, bool>> filterExpression);
         T FindById(string id);
         Task<T> FindByIdAsync (string id);
+        List<T> FindAll(FilterDefinition<T> filterExpression);
+        Task<List<T>> FindAllAsync (FilterDefinition<T> filterExpression);
         void InsertOne(T document);
         Task InsertOneAsync(T document);
         void InsertMany(ICollection<T> collection);

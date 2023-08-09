@@ -1,4 +1,5 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.CategoryFeatures.GetAllCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
 using MediatR;
@@ -35,6 +36,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult<GetCategoryResponse>> GetCategory([FromQuery] GetCategoryRequest request, CancellationToken cancellation)
         {
             return await _mediator.Send(request, cancellation);
+        }
+
+        [HttpGet("GetAllCategory")]
+        public async Task<ActionResult<List<GetAllCategoryResponse>>> GetAllCategory([FromQuery] GetAllCategoryRequest request, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(request, cancellationToken);
         }
     }
 }

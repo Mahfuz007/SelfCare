@@ -60,6 +60,10 @@
             "MediatR": {
               "target": "Package",
               "version": "[12.0.1, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.20.0, )"
             }
           },
           "imports": [
