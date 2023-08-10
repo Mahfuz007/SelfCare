@@ -1,4 +1,5 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
+using Application.Features.CategoryFeatures.DeleteCategory;
 using Application.Features.CategoryFeatures.GetAllCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
@@ -34,6 +35,12 @@ namespace Persistence.Repositories
             await _baseRepository.InsertOneAsync(category);
 
             return _mapper.Map<CreateCategoryResponse>(category);
+        }
+
+        public async Task<bool> DeleteCategory(string categoryId)
+        {
+            await _baseRepository.DeleteByIdAsync(categoryId);
+            return true;
         }
 
         public async Task<List<GetAllCategoryResponse>> GetAllCategory()
