@@ -16,6 +16,7 @@ namespace Persistence
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddSingleton(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<IExpenseRepository, ExpenseRepository>();
             return services;
         }
     }
