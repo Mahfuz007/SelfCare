@@ -131,5 +131,10 @@ namespace Persistence.Repositories
         {
             return await _collection.Find(filterExpression).ToListAsync();
         }
+
+        public async Task<long> CountDocumentAsync(FilterDefinition<T> filterExpression)
+        {
+            return await _collection.CountDocumentsAsync(filterExpression);
+        }
     }
 }

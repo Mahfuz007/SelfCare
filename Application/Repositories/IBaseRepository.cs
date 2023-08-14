@@ -26,6 +26,6 @@ namespace Application.Repositories
         Task DeleteByIdAsync(string id);
         void DeleteMany(Expression<Func<T, bool>> filterExpression);
         Task DeleteManyAsync(Expression<Func<T, bool>>filterExpression);
-
+        Task<long> CountDocumentAsync(FilterDefinition<T> filterExpression);
     }
 }

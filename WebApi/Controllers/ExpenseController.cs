@@ -6,6 +6,7 @@ using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.DeleteExpense;
 using Application.Features.ExpenseFeatures.GetAllExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
+using Application.Features.ExpenseFeatures.GetTotalExpense;
 using Application.Features.ExpenseFeatures.UpdateExpense;
 using Application.Features.UpdateCategory;
 using MediatR;
@@ -90,6 +91,13 @@ namespace WebApi.Controllers
 
         [HttpDelete("DeleteExpense")]
         public async Task<ActionResult<bool>> DeleteExpense([FromQuery] DeleteExpenseRequest request, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return Ok(response);
+        }
+
+        [HttpGet("GetTotalExpenseCount")]
+        public async Task<ActionResult<GetTotalExpenseResponse>> GetTotalExpenseCount([FromQuery] GetTotalExpenseRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);

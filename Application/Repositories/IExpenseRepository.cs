@@ -1,6 +1,7 @@
 ﻿using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.GetAllExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
+using Application.Features.ExpenseFeatures.GetTotalExpense;
 using Application.Features.ExpenseFeatures.UpdateExpense;
 
 namespace Application.Repositories
@@ -13,5 +14,6 @@ namespace Application.Repositories
         Task<UpdateExpenseResponse> UpdateExpense(UpdateExpenseRequest request);
         Task<GetExpenseResponse> GetExpenseById(string expenseId);
         Task<bool> DeleteExpense(string expenseId);
+        Task<GetTotalExpenseResponse> GetTotalExpense(GetTotalExpenseRequest request);
     }
 }
