@@ -59,7 +59,7 @@ namespace Persistence.Repositories
             return _mapper.Map<GetExpenseResponse>(expense);
         }
 
-        public async Task<GetTotalExpenseResponse> GetTotalExpense(GetTotalExpenseRequest request)
+        public async Task<GetTotalExpenseResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request)
         {
             var filter = Builders<Expense>.Filter.Empty;
             if (request.CreatedBy is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CreatedBy, request.CreatedBy);
@@ -72,9 +72,15 @@ namespace Persistence.Repositories
                 filter &= Builders<Expense>.Filter.Where(x => x.CreatedDate >= request.StartDate && x.CreatedDate <= request.EndDate);
             }
 
-            var expenseCount = await _baseRepository.CountDocumentAsync(filter);
+            var expenses = await _baseRepository.FindAllAsync(filter);
+            var totalAmount = 0.0;
 
-            return new GetTotalExpenseResponse() { Amount = expenseCount };
+            foreach (var expense in expenses)
+            {
+                totalAmount += expense.Amount;
+            }
+
+            return new GetTotalExpenseResponse() { Amount = totalAmount };
         }
 
         public async Task<UpdateExpenseResponse> UpdateExpense(UpdateExpenseRequest request)

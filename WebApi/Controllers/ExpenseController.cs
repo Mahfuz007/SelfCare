@@ -96,8 +96,8 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("GetTotalExpenseCount")]
-        public async Task<ActionResult<GetTotalExpenseResponse>> GetTotalExpenseCount([FromQuery] GetTotalExpenseRequest request, CancellationToken cancellationToken)
+        [HttpGet("GetTotalExpenseAmount")]
+        public async Task<ActionResult<GetTotalExpenseResponse>> GetTotalExpenseAmount([FromQuery] GetTotalExpenseRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);

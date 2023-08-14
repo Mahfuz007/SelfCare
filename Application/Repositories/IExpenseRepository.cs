@@ -14,6 +14,6 @@ namespace Application.Repositories
         Task<UpdateExpenseResponse> UpdateExpense(UpdateExpenseRequest request);
         Task<GetExpenseResponse> GetExpenseById(string expenseId);
         Task<bool> DeleteExpense(string expenseId);
-        Task<GetTotalExpenseResponse> GetTotalExpense(GetTotalExpenseRequest request);
+        Task<GetTotalExpenseResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request);
     }
 }

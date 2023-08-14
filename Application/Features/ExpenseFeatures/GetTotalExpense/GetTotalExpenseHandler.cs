@@ -14,7 +14,7 @@ namespace Application.Features.ExpenseFeatures.GetTotalExpense
 
         public async Task<GetTotalExpenseResponse> Handle(GetTotalExpenseRequest request, CancellationToken cancellationToken)
         {
-            return await _expenseRepository.GetTotalExpense(request);
+            return await _expenseRepository.GetTotalExpenseAmount(request);
         }
     }
 }
