@@ -11,5 +11,5 @@ F:\My Works\New folder\SelfCare\Application\bin\Debug\net6.0\Application.dll
 F:\My Works\New folder\SelfCare\Application\bin\Debug\net6.0\Application.pdb
 F:\My Works\New folder\SelfCare\Application\bin\Debug\net6.0\Domain.dll
 F:\My Works\New folder\SelfCare\Application\bin\Debug\net6.0\Domain.pdb
-F:\My Works\New folder\SelfCare\Application\obj\Debug\net6.0\Application.csproj.CopyComplete
 F:\My Works\New folder\SelfCare\Application\obj\Debug\net6.0\ref\Application.dll
+F:\My Works\New folder\SelfCare\Application\obj\Debug\net6.0\Applicat.44B5EDA2.Up2Date
