@@ -17,6 +17,7 @@ namespace Persistence
             services.AddSingleton(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<IExpenseRepository, ExpenseRepository>();
+            services.AddSingleton<ITaxRepository, TaxRepository>();
             return services;
         }
     }
