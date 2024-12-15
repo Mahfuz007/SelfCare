@@ -8,7 +8,7 @@ namespace Application.Common
 {
     public class QueryRequestBase
     {
-        public int? PageIndex { get; set; }
-        public int? PageSize { get; set; }
+        public int PageIndex { get; set; } = 0;
+        public int PageSize { get; set; } = 100;
     }
 }

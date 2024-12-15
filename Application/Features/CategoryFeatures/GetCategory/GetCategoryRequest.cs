@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CategoryFeatures.GetCategory
 {
-    public sealed class GetCategoryRequest : QueryRequestBase, IRequest<GetCategoryResponse>
+    public sealed class GetCategoryRequest : QueryRequestBase, IRequest<List<GetCategoryResponse>>
     {
-        public string CategoryId { get; set; }
+        public string? CategoryId { get; set; }
     }
 }

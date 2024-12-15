@@ -13,13 +13,14 @@ namespace Application.Repositories
         T FindById(string id);
         Task<T> FindByIdAsync (string id);
         List<T> FindAll(FilterDefinition<T> filterExpression);
-        Task<List<T>> FindAllAsync (FilterDefinition<T> filterExpression);
+        Task<List<T>> FindAllAsync (FilterDefinition<T> filterExpression, int pageNo = 0, int pageSize = 100);
         void InsertOne(T document);
         Task InsertOneAsync(T document);
         void InsertMany(ICollection<T> collection);
         Task InsertManyAsync(ICollection<T> collection);
         void ReplaceOne(T document);
         Task ReplaceOneAsync(T document);
+        Task UpdateOneAsync(T document);
         void DeleteOne(Expression<Func<T, bool>>filterExpression);
         Task DeleteOneAsync(Expression<Func<T, bool>>filterExpression);
         void DeleteById(string id);

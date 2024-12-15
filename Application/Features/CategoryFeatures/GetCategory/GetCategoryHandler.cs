@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.CategoryFeatures.GetCategory
 {
-    public sealed class GetCategoryHandler : IRequestHandler<GetCategoryRequest, GetCategoryResponse>
+    public sealed class GetCategoryHandler : IRequestHandler<GetCategoryRequest, List<GetCategoryResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
         public GetCategoryHandler(ICategoryRepository categoryRepository)
@@ -12,9 +12,9 @@ namespace Application.Features.CategoryFeatures.GetCategory
             _categoryRepository = categoryRepository;
         }
 
-        public Task<GetCategoryResponse> Handle(GetCategoryRequest request, CancellationToken cancellationToken)
+        public Task<List<GetCategoryResponse>> Handle(GetCategoryRequest request, CancellationToken cancellationToken)
         {
-            return _categoryRepository.GetCategory(request.CategoryId);
+            return _categoryRepository.GetCategory(request);
         }
     }
 }

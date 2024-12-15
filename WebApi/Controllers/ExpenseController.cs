@@ -1,6 +1,5 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
 using Application.Features.CategoryFeatures.DeleteCategory;
-using Application.Features.CategoryFeatures.GetAllCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.DeleteExpense;
@@ -26,33 +25,27 @@ namespace WebApi.Controllers
         }
 
         #region Category
-        [HttpPost("CreateCategory")]
+        [HttpPost("Category")]
         public async Task<ActionResult<CreateCategoryResponse>> CreateCategory([FromBody] CreateCategoryRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
         }
 
-        [HttpPost("UpdateCategory")]
+        [HttpPut("Category")]
         public async Task<ActionResult<UpdateCategoryResponse>> UpdateCategory([FromBody] UpdateCategoryRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
         }
 
-        [HttpGet("GetCategory")]
-        public async Task<ActionResult<GetCategoryResponse>> GetCategory([FromQuery] GetCategoryRequest request, CancellationToken cancellation)
+        [HttpGet("Category")]
+        public async Task<ActionResult<List<GetCategoryResponse>>> GetCategory([FromQuery] GetCategoryRequest request, CancellationToken cancellation)
         {
             return await _mediator.Send(request, cancellation);
         }
 
-        [HttpGet("GetAllCategory")]
-        public async Task<ActionResult<List<GetAllCategoryResponse>>> GetAllCategory([FromQuery] GetAllCategoryRequest request, CancellationToken cancellationToken)
-        {
-            return await _mediator.Send(request, cancellationToken);
-        }
-
-        [HttpDelete("DeleteCategory")]
+        [HttpDelete("Category")]
         public async Task<ActionResult<bool>> DeleteCategory([FromQuery] DeleteCategoryRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
