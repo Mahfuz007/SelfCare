@@ -122,14 +122,20 @@ namespace Persistence.Repositories
             await _collection.FindOneAndReplaceAsync(filter, document);
         }
 
+        public async Task UpdateOneAsync(T document)
+        {
+            var filter = Builders<T>.Filter.Eq(doc => doc.ItemId, document.ItemId);
+            await _collection.ReplaceOneAsync(filter, document, new ReplaceOptions { IsUpsert = true });
+        }
+
         public List<T> FindAll(FilterDefinition<T> filterExpression)
         {
             return  _collection.Find(filterExpression).ToList();
         }
 
-        public async Task<List<T>> FindAllAsync(FilterDefinition<T> filterExpression)
+        public async Task<List<T>> FindAllAsync(FilterDefinition<T> filterExpression, int pageNo = 0, int pageSize = 100)
         {
-            return await _collection.Find(filterExpression).ToListAsync();
+            return await _collection.Find(filterExpression).Limit(pageSize).Skip(pageNo).ToListAsync();
         }
 
         public async Task<long> CountDocumentAsync(FilterDefinition<T> filterExpression)

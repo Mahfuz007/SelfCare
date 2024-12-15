@@ -1,13 +1,10 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
-using Application.Features.CategoryFeatures.DeleteCategory;
-using Application.Features.CategoryFeatures.GetAllCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MongoDB.Driver;
-using Persistence.Context;
 
 namespace Persistence.Repositories
 {
@@ -43,24 +40,28 @@ namespace Persistence.Repositories
             return true;
         }
 
-        public async Task<List<GetAllCategoryResponse>> GetAllCategory()
+        public async Task<List<GetCategoryResponse>> GetCategory(GetCategoryRequest request)
         {
             var filter = Builders<Category>.Filter.Empty;
-            var categories = await _baseRepository.FindAllAsync(filter);
-            return _mapper.Map<List<GetAllCategoryResponse>>(categories);
-        }
+            if(!string.IsNullOrEmpty(request.CategoryId))
+            {
+                filter &= Builders<Category>.Filter.Eq(x => x.ItemId, request.CategoryId);
+            }
 
-        public async Task<GetCategoryResponse> GetCategory(string categoryId)
-        {
-            var category = await _baseRepository.FindByIdAsync(categoryId);
-            return _mapper.Map<GetCategoryResponse>(category);
+            var categories = await _baseRepository.FindAllAsync(filter, request.PageIndex, request.PageSize);
+            return _mapper.Map<List<GetCategoryResponse>>(categories);
         }
 
         public async Task<UpdateCategoryResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest)
         {
-            var category = _mapper.Map<Category>(updateCategoryRequest);
+            var category = await _baseRepository.FindByIdAsync(updateCategoryRequest.ItemId);
+            if (category == null) return new UpdateCategoryResponse() { Name = "No Category Found for this Item Id" };
+            category.ItemId = updateCategoryRequest.ItemId;
+            category.Name = updateCategoryRequest.Name;
+            category.IsDefault = updateCategoryRequest.IsDefault;
+            category.IsExpense = updateCategoryRequest.IsExpense;
             category.LastModifiedDate = DateTime.UtcNow;
-            await _baseRepository.ReplaceOneAsync(category);
+            await _baseRepository.UpdateOneAsync(category);
             return _mapper.Map<UpdateCategoryResponse>(category);
         }
     }
