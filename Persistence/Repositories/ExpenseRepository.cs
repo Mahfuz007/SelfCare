@@ -1,5 +1,4 @@
 ﻿using Application.Features.ExpenseFeatures.AddExpense;
-using Application.Features.ExpenseFeatures.GetAllExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
 using Application.Features.ExpenseFeatures.GetTotalExpense;
 using Application.Features.ExpenseFeatures.UpdateExpense;
@@ -45,12 +44,20 @@ namespace Persistence.Repositories
             return true;
         }
 
-        public async Task<List<GetAllExpenseResponse>> GetAllExpense()
+        public async Task<List<GetExpenseResponse>> GetExpenses(GetExpenseRequest request)
         {
             var filter = Builders<Expense>.Filter.Empty;
-            var expenses = await _baseRepository.FindAllAsync(filter);
+            if (!string.IsNullOrWhiteSpace(request.ExpenseId))
+            {
+                filter &= Builders<Expense>.Filter.Eq(x => x.ItemId, request.ExpenseId);
+            }
+            if (!string.IsNullOrWhiteSpace(request.ExpenseName))
+            {
+                filter &= Builders<Expense>.Filter.Eq(x => x.Name, request.ExpenseName);
+            }
+            var expenses = await _baseRepository.FindAllAsync(filter, request.PageIndex, request.PageSize);
 
-            return _mapper.Map<List<GetAllExpenseResponse>>(expenses);
+            return _mapper.Map<List<GetExpenseResponse>>(expenses);
         }
 
         public async Task<GetExpenseResponse> GetExpenseById(string expenseId)

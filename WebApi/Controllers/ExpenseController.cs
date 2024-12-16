@@ -3,7 +3,6 @@ using Application.Features.CategoryFeatures.DeleteCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.DeleteExpense;
-using Application.Features.ExpenseFeatures.GetAllExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
 using Application.Features.ExpenseFeatures.GetTotalExpense;
 using Application.Features.ExpenseFeatures.UpdateExpense;
@@ -54,42 +53,35 @@ namespace WebApi.Controllers
 
         #endregion
         #region Expense
-        [HttpPost("AddExpense")]
+        [HttpPost()]
         public async Task<ActionResult<AddExpenseResponse>> AddExpense([FromBody] AddExpenseRequest requst, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(requst, cancellationToken);
             return Ok(response);
         }
 
-        [HttpGet("GetAllExpense")]
-        public async Task<ActionResult<List<GetAllExpenseResponse>>> GetAllExpense([FromQuery] GetAllExpenseRequest request,CancellationToken cancellationToken1)
-        {
-            var response = await _mediator.Send(request, cancellationToken1);
-            return Ok(response);
-        }
-
-        [HttpPut("UpdateExpense")]
+        [HttpPut()]
         public async Task<ActionResult<UpdateExpenseResponse>> UpdateExpense([FromBody] UpdateExpenseRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
         }
 
-        [HttpGet("GetExpense")]
-        public async Task<ActionResult<GetExpenseRequest>> GetExpense([FromQuery] GetExpenseRequest request,CancellationToken cancellationToken)
+        [HttpGet()]
+        public async Task<ActionResult<List<GetExpenseRequest>>> GetExpense([FromQuery] GetExpenseRequest request,CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
         }
 
-        [HttpDelete("DeleteExpense")]
+        [HttpDelete()]
         public async Task<ActionResult<bool>> DeleteExpense([FromQuery] DeleteExpenseRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
         }
 
-        [HttpGet("GetTotalExpenseAmount")]
+        [HttpGet("TotalExpenseAmount")]
         public async Task<ActionResult<GetTotalExpenseResponse>> GetTotalExpenseAmount([FromQuery] GetTotalExpenseRequest request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
