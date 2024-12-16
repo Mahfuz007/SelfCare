@@ -1,25 +1,20 @@
 ﻿using Application.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.ExpenseFeatures.GetExpense
 {
-    public class GetExpenseHandler : IRequestHandler<GetExpenseRequest, GetExpenseResponse>
+    public class GetExpenseHandler : IRequestHandler<GetExpenseRequest, List<GetExpenseResponse>>
     {
-        private IExpenseRepository _expenseRepository;
+        private readonly IExpenseRepository _expenseRepository;
 
         public GetExpenseHandler(IExpenseRepository expenseRepository)
         {
             _expenseRepository = expenseRepository;
         }
 
-        public async Task<GetExpenseResponse> Handle(GetExpenseRequest request, CancellationToken cancellationToken)
+        public async Task<List<GetExpenseResponse>> Handle(GetExpenseRequest request, CancellationToken cancellationToken)
         {
-            return await _expenseRepository.GetExpenseById(request.ExpenseId);
+            return await _expenseRepository.GetExpenses(request);
         }
     }
 }

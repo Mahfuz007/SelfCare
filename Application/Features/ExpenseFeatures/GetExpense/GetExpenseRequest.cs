@@ -1,15 +1,11 @@
-﻿using Amazon.Runtime.Internal;
+﻿using Application.Common;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.ExpenseFeatures.GetExpense
 {
-    public class GetExpenseRequest : IRequest<GetExpenseResponse>
+    public class GetExpenseRequest : QueryRequestBase, IRequest<List<GetExpenseResponse>>
     {
-        public string ExpenseId { get; set; }
+        public string ExpenseId { get; set; } = string.Empty;
+        public string ExpenseName { get; set;} = string.Empty;
     }
 }

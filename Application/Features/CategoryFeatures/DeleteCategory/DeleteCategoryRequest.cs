@@ -4,6 +4,6 @@ namespace Application.Features.CategoryFeatures.DeleteCategory
 {
     public sealed class DeleteCategoryRequest : IRequest<bool>
     {
-        public string CategoryId { get; set; }
+        public string CategoryId { get; set; } = string.Empty;
     }
 }
