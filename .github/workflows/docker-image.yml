@@ -27,4 +27,4 @@ jobs:
 
       - name: Start New Container
         run: |
-          docker run -d -p 6006:80 --name selfcare-server-1 selfcare-server
+          docker run -d -p 6006:80 --name selfcare selfcare-server
