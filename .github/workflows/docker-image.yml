@@ -1,0 +1,30 @@
+name: Docker Build and Deploy Locally
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted  # Run on your local machine with GitHub Runner
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build -t selfcare-server .
+
+      - name: Stop Old Container
+        run: |
+          docker stop selfcare-server-1 || true
+          docker rm selfcare-server-1 || true
+
+      - name: Start New Container
+        run: |
+          docker run -d -p 8080:80 --name selfcare-server-1 selfcare-server
