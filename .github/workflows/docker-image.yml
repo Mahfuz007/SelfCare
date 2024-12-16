@@ -18,13 +18,5 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t selfcare-server .
-
-      - name: Stop Old Container
-        run: |
-          docker stop selfcare
-          docker rm selfcare
-
-      - name: Start New Container
-        run: |
-          docker run -d -p 6006:80 selfcare-server
+          docker compose rm
+          docker compose up --build -d
