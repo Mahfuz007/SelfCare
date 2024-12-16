@@ -22,9 +22,9 @@ jobs:
 
       - name: Stop Old Container
         run: |
-          docker stop selfcare-server-1
-          docker rm selfcare-server-1
+          docker stop selfcare
+          docker rm selfcare
 
       - name: Start New Container
         run: |
-          docker run -d -p 6006:80 --name selfcare selfcare-server
+          docker run -d -p 6006:80 selfcare-server
