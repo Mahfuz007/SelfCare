@@ -20,12 +20,14 @@ namespace Application.Features.ExpenseFeatures.UpdateExpense
             RuleFor(x => x.Amount)
                 .GreaterThan(0)
                 .WithMessage("Amount must be greater than 0");
-            RuleFor(x => x.CategoryName)
-                .NotEmpty();
             RuleFor(x => x.CategoryId)
-                .NotEmpty()
-                .MustAsync(async (CategoryId, _) => await _categoryRepository.BeAnExistingCategory(CategoryId))
-                .WithMessage("No category Exists with the category ID");
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().When(x => !string.IsNullOrEmpty(x.CategoryId))
+                .MustAsync(async(CategoryId, _) => await _categoryRepository.BeAnExistingCategory(CategoryId))
+                .WithMessage("No category Exists with the given category Id").When(x => !string.IsNullOrEmpty(x.CategoryId));
+            RuleFor(x => x.CategoryName)
+           .Must((model, categoryName) => !string.IsNullOrEmpty(model.CategoryId) || string.IsNullOrEmpty(categoryName))
+           .WithMessage("CategoryName  is invalid");
         }
     }
 }

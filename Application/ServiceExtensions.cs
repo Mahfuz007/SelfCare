@@ -15,8 +15,8 @@ namespace Application
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(ServiceExtensions).Assembly));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehaviour<,>));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>(ServiceLifetime.Singleton);
-            services.AddValidatorsFromAssemblyContaining<UpdateCategoryValidator>(ServiceLifetime.Singleton);
+            services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>(ServiceLifetime.Scoped);
+            services.AddValidatorsFromAssemblyContaining<UpdateCategoryValidator>(ServiceLifetime.Scoped);
             return services;
         }
     }
