@@ -18,6 +18,12 @@ namespace Persistence
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<IExpenseRepository, ExpenseRepository>();
             services.AddSingleton<ITaxRepository, TaxRepository>();
+
+            services.AddSingleton<MongoDbInitializer>(sp =>
+            {
+                var dbSetting = sp.GetRequiredService<IMongoDbSettings>();
+                return new MongoDbInitializer(dbSetting);
+            });
             return services;
         }
     }
