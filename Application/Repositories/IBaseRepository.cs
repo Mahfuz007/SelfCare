@@ -10,6 +10,7 @@ namespace Application.Repositories
         IEnumerable<T> FilterBy(Expression<Func<T, bool>> filterExpression);
         T FindOne (Expression<Func<T, bool>> filterExpression);
         Task<T> FindOneAsync (Expression<Func<T, bool>> filterExpression);
+        Task<T> FindOneAsync(FilterDefinition<T> filterExpression);
         T FindById(string id);
         Task<T> FindByIdAsync (string id);
         List<T> FindAll(FilterDefinition<T> filterExpression);

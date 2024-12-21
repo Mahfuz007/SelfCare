@@ -90,6 +90,11 @@ namespace Persistence.Repositories
             return await _collection.Find(filterExpression).FirstOrDefaultAsync();
         }
 
+        public async Task<T> FindOneAsync(FilterDefinition<T> filterExpression)
+        {
+            return await _collection.Find(filterExpression).FirstOrDefaultAsync();
+        }
+
         public void InsertMany(ICollection<T> collection)
         {
             _collection.InsertMany(collection);
