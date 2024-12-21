@@ -15,7 +15,7 @@ namespace Persistence.Context
         public async Task InitializeIndexesAsync()
         {
             var collection = _database.GetCollection<BsonDocument>("Category");
-            var indexKeys = Builders<BsonDocument>.IndexKeys.Ascending("Name");
+            var indexKeys = Builders<BsonDocument>.IndexKeys.Text("Name");
             var indexModel = new CreateIndexModel<BsonDocument>(indexKeys);
             await collection.Indexes.CreateOneAsync(indexModel);
         }

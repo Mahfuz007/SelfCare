@@ -64,5 +64,29 @@ namespace Persistence.Repositories
             await _baseRepository.UpdateOneAsync(category);
             return _mapper.Map<UpdateCategoryResponse>(category);
         }
+
+        public async Task<Category> GetSpecificExpenseCategory(Expense expense)
+        {
+            if(!string.IsNullOrEmpty(expense.CategoryId))
+            {
+                return await _baseRepository.FindByIdAsync(expense.CategoryId);
+            }
+
+            var filter = Builders<Category>.Filter.Or(
+                    Builders<Category>.Filter.Eq(x => x.Name, expense.Name),
+                    Builders<Category>.Filter.Text(expense.Name),
+                    Builders<Category>.Filter.Eq(x => x.Name, "Others"));
+            var category = await _baseRepository.FindOneAsync(filter);
+
+            if(category is null)
+            {
+                return new Category()
+                {
+                    Name = "Others"
+                };
+            }
+
+            return category;
+        }
     }
 }

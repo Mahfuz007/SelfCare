@@ -1,6 +1,7 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
 using Application.Features.CategoryFeatures.GetCategory;
 using Application.Features.UpdateCategory;
+using Domain.Entities;
 
 namespace Application.Repositories
 {
@@ -11,5 +12,6 @@ namespace Application.Repositories
         Task<bool> BeAnExistingCategory(string id);
         Task<List<GetCategoryResponse>> GetCategory(GetCategoryRequest request);
         Task<bool> DeleteCategory(string categoryId);
+        Task<Category> GetSpecificExpenseCategory(Expense expense);
     }
 }

@@ -10,7 +10,6 @@ namespace Application.Features.ExpenseFeatures.AddExpense
         {
             _categoryRepository = categoryRepository;
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.Amount).NotEmpty().GreaterThanOrEqualTo(1).WithMessage("Amount can not be 0 or negetive");
             RuleFor(x => x.CategoryId)
                 .Cascade(CascadeMode.Stop)

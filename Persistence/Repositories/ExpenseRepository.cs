@@ -13,11 +13,13 @@ namespace Persistence.Repositories
     {
         private readonly IMapper _mapper;
         private readonly IBaseRepository<Expense> _baseRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ExpenseRepository(IMapper mapper, IBaseRepository<Expense> baseRepository)
+        public ExpenseRepository(IMapper mapper, IBaseRepository<Expense> baseRepository, ICategoryRepository categoryRepository)
         {
             _mapper = mapper;
             _baseRepository = baseRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<AddExpenseResponse> AddExpense(AddExpenseRequest request)
@@ -26,6 +28,7 @@ namespace Persistence.Repositories
             expense.ItemId = Guid.NewGuid().ToString();
             expense.CreatedDate = DateTime.UtcNow;
             expense.LastModifiedDate = DateTime.UtcNow;
+            await UpdateDescriptionAndCategoryDetails(request.Description, request.Name, expense);
 
             await _baseRepository.InsertOneAsync(expense);
 
@@ -96,8 +99,18 @@ namespace Persistence.Repositories
             var currData = await this.GetExpenseById(request.ExpenseId);
             expense.CreatedDate = currData.CreatedDate;
             expense.LastModifiedDate = DateTime.UtcNow;
+            await UpdateDescriptionAndCategoryDetails(request.Description, request.Name, expense);
             await _baseRepository.ReplaceOneAsync(expense);
             return _mapper.Map<UpdateExpenseResponse>(expense);
+        }
+
+        private async Task UpdateDescriptionAndCategoryDetails(string description, string name, Expense expense)
+        {
+            if (string.IsNullOrEmpty(description)) expense.Description = name;
+
+            var category = await _categoryRepository.GetSpecificExpenseCategory(expense);
+            expense.CategoryName = category.Name;
+            expense.CategoryId = category.ItemId;
         }
     }
 }
