@@ -24,6 +24,8 @@ namespace Persistence
                 var dbSetting = sp.GetRequiredService<IMongoDbSettings>();
                 return new MongoDbInitializer(dbSetting);
             });
+
+            services.AddScoped<IExcelReader, ExcelReader>();
             return services;
         }
     }
