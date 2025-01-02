@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.UpdateCategory
+namespace Application.Features.CategoryFeatures.UpdateCategory
 {
     public sealed record UpdateCategoryRequest : IRequest<UpdateCategoryResponse>
     {

@@ -1,4 +1,4 @@
-﻿namespace Application.Features.UpdateCategory
+﻿namespace Application.Features.CategoryFeatures.UpdateCategory
 {
     public sealed record UpdateCategoryResponse
     {

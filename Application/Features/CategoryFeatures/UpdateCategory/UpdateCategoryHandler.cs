@@ -4,7 +4,7 @@ using FluentValidation;
 using MediatR;
 
 
-namespace Application.Features.UpdateCategory
+namespace Application.Features.CategoryFeatures.UpdateCategory
 {
     public sealed class UpdateCategoryHandler : IRequestHandler<UpdateCategoryRequest, UpdateCategoryResponse>
     {
@@ -18,7 +18,7 @@ namespace Application.Features.UpdateCategory
         public async Task<UpdateCategoryResponse> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                 throw new BadRequestException(validationResult.ToString());
             }

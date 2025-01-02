@@ -1,6 +1,6 @@
 ﻿using Application.Features.CategoryFeatures.CreateCategory;
 using Application.Features.CategoryFeatures.GetCategory;
-using Application.Features.UpdateCategory;
+using Application.Features.CategoryFeatures.UpdateCategory;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
