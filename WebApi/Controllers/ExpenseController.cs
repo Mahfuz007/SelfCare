@@ -1,12 +1,14 @@
-﻿using Application.Features.CategoryFeatures.CreateCategory;
+﻿using Application.Common.Interfaces;
+using Application.Features.CategoryFeatures.CreateCategory;
 using Application.Features.CategoryFeatures.DeleteCategory;
 using Application.Features.CategoryFeatures.GetCategory;
+using Application.Features.CategoryFeatures.UpdateCategory;
 using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.DeleteExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
 using Application.Features.ExpenseFeatures.GetTotalExpense;
+using Application.Features.ExpenseFeatures.ImportFromExcel;
 using Application.Features.ExpenseFeatures.UpdateExpense;
-using Application.Features.UpdateCategory;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +19,12 @@ namespace WebApi.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly IMediator _mediator;
-        
-        public ExpenseController(IMediator mediator)
+        private readonly IServiceClient _serviceClient;
+
+        public ExpenseController(IMediator mediator, IServiceClient serviceClient)
         {
             _mediator = mediator;
+            _serviceClient = serviceClient;
         }
 
         #region Category
@@ -86,6 +90,16 @@ namespace WebApi.Controllers
         {
             var response = await _mediator.Send(request, cancellationToken);
             return Ok(response);
+        }
+
+        [HttpPost("ImportFromExcel")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadExcelFile([FromForm] ImportExpenseExcelRequest request, CancellationToken cancellationToken)
+        {
+            if (request == null || request.File == null) return BadRequest();
+            var response = await _mediator.Send(request, cancellationToken);
+            return Ok(response);
+
         }
         #endregion
     }
