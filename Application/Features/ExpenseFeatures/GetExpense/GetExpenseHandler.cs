@@ -1,9 +1,10 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using MediatR;
 
 namespace Application.Features.ExpenseFeatures.GetExpense
 {
-    public class GetExpenseHandler : IRequestHandler<GetExpenseRequest, List<GetExpenseResponse>>
+    public class GetExpenseHandler : IRequestHandler<GetExpenseRequest, CommonResponse>
     {
         private readonly IExpenseRepository _expenseRepository;
 
@@ -12,9 +13,10 @@ namespace Application.Features.ExpenseFeatures.GetExpense
             _expenseRepository = expenseRepository;
         }
 
-        public async Task<List<GetExpenseResponse>> Handle(GetExpenseRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> Handle(GetExpenseRequest request, CancellationToken cancellationToken)
         {
-            return await _expenseRepository.GetExpenses(request);
+            var expenses = await _expenseRepository.GetExpenses(request);
+            return expenses;
         }
     }
 }

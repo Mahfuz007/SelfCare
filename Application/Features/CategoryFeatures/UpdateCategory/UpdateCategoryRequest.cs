@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.Common;
+using MediatR;
 
 namespace Application.Features.CategoryFeatures.UpdateCategory
 {
-    public sealed record UpdateCategoryRequest : IRequest<UpdateCategoryResponse>
+    public sealed record UpdateCategoryRequest : IRequest<CommonResponse>
     {
         public string ItemId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

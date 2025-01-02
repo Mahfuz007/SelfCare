@@ -1,4 +1,5 @@
-﻿using Application.Features.ExpenseFeatures.AddExpense;
+﻿using Application.Common;
+using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
 using Application.Features.ExpenseFeatures.GetTotalExpense;
 using Application.Features.ExpenseFeatures.UpdateExpense;
@@ -6,6 +7,7 @@ using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MongoDB.Driver;
+using System.Net;
 
 namespace Persistence.Repositories
 {
@@ -22,7 +24,7 @@ namespace Persistence.Repositories
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<AddExpenseResponse> AddExpense(AddExpenseRequest request)
+        public async Task<CommonResponse> AddExpense(AddExpenseRequest request)
         {
             var expense = _mapper.Map<Expense>(request);
             expense.ItemId = Guid.NewGuid().ToString();
@@ -32,7 +34,7 @@ namespace Persistence.Repositories
 
             await _baseRepository.InsertOneAsync(expense);
 
-            return _mapper.Map<AddExpenseResponse>(expense);
+            return new CommonResponse(HttpStatusCode.Created,_mapper.Map<AddExpenseResponse>(expense));
         }
 
         public async Task<bool> CheckIfExpenseExists(string expenseId)
@@ -41,13 +43,13 @@ namespace Persistence.Repositories
             return result is not null;
         }
 
-        public async Task<bool> DeleteExpense(string expenseId)
+        public async Task<CommonResponse> DeleteExpense(string expenseId)
         {
             await _baseRepository.DeleteByIdAsync(expenseId);
-            return true;
+            return new CommonResponse(HttpStatusCode.OK, "Successfully Deleted!");
         }
 
-        public async Task<List<GetExpenseResponse>> GetExpenses(GetExpenseRequest request)
+        public async Task<CommonResponse> GetExpenses(GetExpenseRequest request)
         {
             var filter = Builders<Expense>.Filter.Empty;
             if (!string.IsNullOrWhiteSpace(request.ExpenseId))
@@ -58,9 +60,9 @@ namespace Persistence.Repositories
             {
                 filter &= Builders<Expense>.Filter.Eq(x => x.Name, request.ExpenseName);
             }
+            var totalCount = await _baseRepository.CountDocumentAsync(filter);
             var expenses = await _baseRepository.FindAllAsync(filter, request.PageIndex, request.PageSize);
-
-            return _mapper.Map<List<GetExpenseResponse>>(expenses);
+            return new CommonResponse(expenses, totalCount);
         }
 
         public async Task<GetExpenseResponse> GetExpenseById(string expenseId)
@@ -69,7 +71,7 @@ namespace Persistence.Repositories
             return _mapper.Map<GetExpenseResponse>(expense);
         }
 
-        public async Task<GetTotalExpenseResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request)
+        public async Task<CommonResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request)
         {
             var filter = Builders<Expense>.Filter.Empty;
             if (request.CreatedBy is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CreatedBy, request.CreatedBy);
@@ -90,10 +92,12 @@ namespace Persistence.Repositories
                 totalAmount += expense.Amount;
             }
 
-            return new GetTotalExpenseResponse() { Amount = totalAmount };
+            var response = new GetTotalExpenseResponse() { Amount = totalAmount };
+
+            return new CommonResponse(response);
         }
 
-        public async Task<UpdateExpenseResponse> UpdateExpense(UpdateExpenseRequest request)
+        public async Task<CommonResponse> UpdateExpense(UpdateExpenseRequest request)
         {
             var expense = _mapper.Map<Expense>(request);
             var currData = await this.GetExpenseById(request.ExpenseId);
@@ -101,7 +105,7 @@ namespace Persistence.Repositories
             expense.LastModifiedDate = DateTime.UtcNow;
             await UpdateDescriptionAndCategoryDetails(request.Description, request.Name, expense);
             await _baseRepository.ReplaceOneAsync(expense);
-            return _mapper.Map<UpdateExpenseResponse>(expense);
+            return new CommonResponse(_mapper.Map<UpdateExpenseResponse>(expense));
         }
 
         private async Task UpdateDescriptionAndCategoryDetails(string description, string name, Expense expense)

@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.Common;
+using MediatR;
 
 namespace Application.Features.ExpenseFeatures.GetTotalExpense
 {
-    public class GetTotalExpenseRequest : IRequest<GetTotalExpenseResponse>
+    public class GetTotalExpenseRequest : IRequest<CommonResponse>
     {
         public string? CreatedBy { get; set; }
         public string? CategoryId { get; set; }

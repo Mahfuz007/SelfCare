@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.CategoryFeatures.DeleteCategory
 {
-    public sealed class DeleteCategoryHandler : IRequestHandler<DeleteCategoryRequest, bool>
+    public sealed class DeleteCategoryHandler : IRequestHandler<DeleteCategoryRequest, CommonResponse>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IValidator<DeleteCategoryRequest> _validator;
@@ -21,12 +21,12 @@ namespace Application.Features.CategoryFeatures.DeleteCategory
             _validator = validator;
         }
 
-        public async Task<bool> Handle(DeleteCategoryRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> Handle(DeleteCategoryRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
-                throw new BadRequestException(validationResult.ToString());
+                return new CommonResponse(validationResult);
             }
             return await _categoryRepository.DeleteCategory(request.CategoryId);
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.ExpenseFeatures.UpdateExpense
 {
-    public class UpdateExpenseHandler : IRequestHandler<UpdateExpenseRequest, UpdateExpenseResponse>
+    public class UpdateExpenseHandler : IRequestHandler<UpdateExpenseRequest, CommonResponse>
     {
         private IValidator<UpdateExpenseRequest> _validator;
         private IExpenseRepository _expenseRepository;
@@ -21,12 +21,12 @@ namespace Application.Features.ExpenseFeatures.UpdateExpense
             _expenseRepository = expenseRepository;
         }
 
-        public async Task<UpdateExpenseResponse> Handle(UpdateExpenseRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> Handle(UpdateExpenseRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if(!validationResult.IsValid)
             {
-                throw new BadRequestException(validationResult.ToString());
+                return new CommonResponse(validationResult);
             }
 
             return await _expenseRepository.UpdateExpense(request);

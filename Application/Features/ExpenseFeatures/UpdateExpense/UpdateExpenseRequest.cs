@@ -1,9 +1,9 @@
-﻿using Application.Features.ExpenseFeatures.AddExpense;
+﻿using Application.Common;
 using MediatR;
 
 namespace Application.Features.ExpenseFeatures.UpdateExpense
 {
-    public class UpdateExpenseRequest : IRequest<UpdateExpenseResponse>
+    public class UpdateExpenseRequest : IRequest<CommonResponse>
     {
         public string ExpenseId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

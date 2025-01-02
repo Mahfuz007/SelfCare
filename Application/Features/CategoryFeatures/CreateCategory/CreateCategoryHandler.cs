@@ -1,13 +1,11 @@
 ﻿using Application.Common;
 using Application.Repositories;
-using AutoMapper;
-using Domain.Entities;
 using FluentValidation;
 using MediatR;
 
 namespace Application.Features.CategoryFeatures.CreateCategory
 {
-    public sealed class CreateCategoryHandler : IRequestHandler<CreateCategoryRequest, CreateCategoryResponse>
+    public sealed class CreateCategoryHandler : IRequestHandler<CreateCategoryRequest, CommonResponse>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IValidator<CreateCategoryRequest> _validator;
@@ -18,16 +16,16 @@ namespace Application.Features.CategoryFeatures.CreateCategory
             _validator = validator;
         }
 
-        public async Task<CreateCategoryResponse> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
-                Console.WriteLine(validationResult);
-                throw new BadRequestException(validationResult.ToString());
+                return new CommonResponse(validationResult);
             }
             
-            return await _categoryRepository.CreateCategory(request);
+            var result = await _categoryRepository.CreateCategory(request);
+            return result;
         }
     }
 }
