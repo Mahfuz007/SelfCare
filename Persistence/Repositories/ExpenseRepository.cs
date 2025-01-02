@@ -112,5 +112,32 @@ namespace Persistence.Repositories
             expense.CategoryName = category.Name;
             expense.CategoryId = category.ItemId;
         }
+
+        public async Task<bool> ProcessImportedExpense(IEnumerable<Expense> expenses, string excelName)
+        {
+            int index = 1;
+            var validExpenses = new List<Expense>();
+            foreach (var expense in expenses)
+            {
+                if (string.IsNullOrEmpty(expense.Name) || expense.CreatedDate == default) continue;
+                if (await checkIfExcelImportExist(excelName + "_" + index)) continue;
+                expense.ItemId = Guid.NewGuid().ToString();
+                expense.ImportedExcelName = excelName + "_"+ index++;
+                await UpdateDescriptionAndCategoryDetails(description: expense.Description,name: expense.Name,expense: expense);
+                expense.LastModifiedDate= DateTime.UtcNow;
+                validExpenses.Add(expense);
+            }
+
+            await _baseRepository.InsertManyAsync(validExpenses.ToList());
+
+            return true;
+        }
+
+        private async Task<bool> checkIfExcelImportExist(string excelEntryName)
+        {
+            var filter = Builders<Expense>.Filter.Eq(x => x.ImportedExcelName, excelEntryName);
+            var result = await _baseRepository.CountDocumentAsync(filter);
+            return result > 0;
+        }
     }
 }
