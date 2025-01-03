@@ -117,7 +117,7 @@ namespace Persistence.Repositories
             expense.CategoryId = category.ItemId;
         }
 
-        public async Task<bool> ProcessImportedExpense(IEnumerable<Expense> expenses, string excelName)
+        public async Task<CommonResponse> ProcessImportedExpense(IEnumerable<Expense> expenses, string excelName)
         {
             int index = 1;
             var validExpenses = new List<Expense>();
@@ -132,9 +132,9 @@ namespace Persistence.Repositories
                 validExpenses.Add(expense);
             }
 
-            await _baseRepository.InsertManyAsync(validExpenses.ToList());
+            if(validExpenses.Count > 0) await _baseRepository.InsertManyAsync(validExpenses.ToList());
 
-            return true;
+            return new CommonResponse(new { TotalImportedExpenseCount = expenses.Count(), InsertedExpenseCount = validExpenses.Count });
         }
 
         private async Task<bool> checkIfExcelImportExist(string excelEntryName)

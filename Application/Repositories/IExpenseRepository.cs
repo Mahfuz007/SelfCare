@@ -16,6 +16,6 @@ namespace Application.Repositories
         Task<GetExpenseResponse> GetExpenseById(string expenseId);
         Task<CommonResponse> DeleteExpense(string expenseId);
         Task<CommonResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request);
-        Task<bool> ProcessImportedExpense(IEnumerable<Expense> expenses, string excelName);
+        Task<CommonResponse> ProcessImportedExpense(IEnumerable<Expense> expenses, string excelName);
     }
 }

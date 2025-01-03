@@ -1,9 +1,10 @@
-﻿using Application.Features.TaxFeature.GetTaxCalculation;
+﻿using Application.Common;
+using Application.Features.TaxFeature.GetTaxCalculation;
 
 namespace Application.Repositories
 {
     public interface ITaxRepository
     {
-        GetTaxCalculationResponse GetTaxCalculation(GetTaxCalculationRequest request);
+        CommonResponse GetTaxCalculation(GetTaxCalculationRequest request);
     }
 }

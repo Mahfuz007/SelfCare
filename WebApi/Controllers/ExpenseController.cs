@@ -95,11 +95,11 @@ namespace WebApi.Controllers
 
         [HttpPost("ImportFromExcel")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadExcelFile([FromForm] ImportExpenseExcelRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> UploadExcelFile([FromForm] ImportExpenseExcelRequest request, CancellationToken cancellationToken)
         {
-            if (request == null || request.File == null) return BadRequest();
+            if (request == null || request.File == null) return new CommonResponse(System.Net.HttpStatusCode.BadRequest, "Provide Valid Excel File");
             var response = await _mediator.Send(request, cancellationToken);
-            return Ok(response);
+            return response;
 
         }
         #endregion

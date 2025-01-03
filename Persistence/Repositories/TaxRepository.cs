@@ -1,11 +1,12 @@
-﻿using Application.Features.TaxFeature.GetTaxCalculation;
+﻿using Application.Common;
+using Application.Features.TaxFeature.GetTaxCalculation;
 using Application.Repositories;
 
 namespace Persistence.Repositories
 {
     public class TaxRepository : ITaxRepository
     {
-        public GetTaxCalculationResponse GetTaxCalculation(GetTaxCalculationRequest request)
+        public CommonResponse GetTaxCalculation(GetTaxCalculationRequest request)
         {
             var taxCalculation = new GetTaxCalculationResponse()
             {
@@ -20,7 +21,7 @@ namespace Persistence.Repositories
                 ApplicableTaxAfterMaxRebate = GetApplicableTaxAfterMaxRebate(request.TotalIncome)
             };
 
-            return taxCalculation;
+            return new CommonResponse(taxCalculation);
         }
 
         private long GetTaxableIncome(long totalIncome)
