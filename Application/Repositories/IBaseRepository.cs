@@ -14,7 +14,8 @@ namespace Application.Repositories
         T FindById(string id);
         Task<T> FindByIdAsync (string id);
         List<T> FindAll(FilterDefinition<T> filterExpression);
-        Task<List<T>> FindAllAsync (FilterDefinition<T> filterExpression, int pageNo = 0, int pageSize = 100);
+        Task<List<T>> GetItemsAsync (FilterDefinition<T> filterExpression);
+        Task<(List<T>, long)> GetItemsWithCountAsync(FilterDefinition<T> filterExpression, int pageNo = 0, int pageSize = 100);
         void InsertOne(T document);
         Task InsertOneAsync(T document);
         void InsertMany(ICollection<T> collection);
