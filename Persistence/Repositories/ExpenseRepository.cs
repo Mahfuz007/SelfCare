@@ -60,8 +60,8 @@ namespace Persistence.Repositories
             {
                 filter &= Builders<Expense>.Filter.Eq(x => x.Name, request.ExpenseName);
             }
-            var totalCount = await _baseRepository.CountDocumentAsync(filter);
-            var expenses = await _baseRepository.FindAllAsync(filter, request.PageIndex, request.PageSize);
+
+            var (expenses, totalCount) = await _baseRepository.GetItemsWithCountAsync(filter, request.PageIndex, request.PageSize);
             return new CommonResponse(expenses, totalCount);
         }
 
@@ -76,17 +76,22 @@ namespace Persistence.Repositories
             var filter = Builders<Expense>.Filter.Empty;
             if (request.CreatedBy is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CreatedBy, request.CreatedBy);
             if (request.CategoryId is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CategoryId, request.CategoryId);
-            if(request.StartDate.HasValue 
-                && request.StartDate != DateTime.MinValue 
-                && request.EndDate.HasValue 
-                && request.EndDate != DateTime.MinValue)
+            TimeZoneInfo localZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time"); // GMT+06
+            if (request.StartDate.HasValue && request.StartDate != DateTime.MinValue)
             {
-                var dateValue = request.EndDate.Value;
-                var endDate = new DateTime(dateValue.Year, dateValue.Month, dateValue.Day, 23, 59, 59, DateTimeKind.Utc);
-                filter &= Builders<Expense>.Filter.Where(x => x.CreatedDate >= request.StartDate && x.CreatedDate <= endDate);
+                DateTime startOfDayLocal = request.StartDate.Value.Date; // Start of the day in local time
+                DateTime startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal, localZone);
+                filter &= Builders<Expense>.Filter.Gte(x => x.CreatedDate , startOfDayUtc);
             }
 
-            var expenses = await _baseRepository.FindAllAsync(filter);
+            if(request.EndDate.HasValue && request.EndDate != DateTime.MinValue)
+            {
+                DateTime endOfDayLocal = request.EndDate.Value.AddDays(1).AddTicks(-1); // End of the day in local time
+                DateTime endOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(endOfDayLocal, localZone);
+                filter &= Builders<Expense>.Filter.Lte(x => x.CreatedDate, endOfDayUtc);
+            }
+
+            var expenses = await _baseRepository.GetItemsAsync(filter);
             var totalAmount = expenses.Sum(x => x.Amount);
             var expenseByCategory = expenses.GroupBy(x => x.CategoryName).ToDictionary(xd => xd.Key, xd => xd.Sum(p => p.Amount));
             var expensePercentageByCategory = expenses.GroupBy(x => x.CategoryName).ToDictionary(xd => xd.Key, xd => Math.Round((xd.Sum(p => p.Amount) / totalAmount) * 100, 2));
@@ -98,7 +103,7 @@ namespace Persistence.Repositories
                 ExpensePercentageByCategory= expensePercentageByCategory
             };
 
-            return new CommonResponse(response);
+            return new CommonResponse(response, expenses.Count);
         }
 
         public async Task<CommonResponse> UpdateExpense(UpdateExpenseRequest request)

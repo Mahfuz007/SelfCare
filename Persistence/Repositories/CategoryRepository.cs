@@ -50,8 +50,8 @@ namespace Persistence.Repositories
             {
                 filter &= Builders<Category>.Filter.Eq(x => x.ItemId, request.CategoryId);
             }
-            var totalCount = await _baseRepository.CountDocumentAsync(filter);
-            var categories = await _baseRepository.FindAllAsync(filter, request.PageIndex, request.PageSize);
+
+            var (categories, totalCount) = await _baseRepository.GetItemsWithCountAsync(filter, request.PageIndex, request.PageSize);
             return new CommonResponse(_mapper.Map<List<GetCategoryResponse>>(categories), totalCount);
         }
 
