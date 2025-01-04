@@ -27,6 +27,7 @@ namespace Persistence
             });
 
             services.AddScoped<IExcelReader, ExcelReader>();
+            services.AddSingleton<IServiceClient, ServiceClient>();
             return services;
         }
     }
