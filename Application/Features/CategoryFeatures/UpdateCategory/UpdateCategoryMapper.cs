@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 
-namespace Application.Features.UpdateCategory
+namespace Application.Features.CategoryFeatures.UpdateCategory
 {
-    public sealed class UpdateCategoryMapper: Profile
+    public sealed class UpdateCategoryMapper : Profile
     {
         public UpdateCategoryMapper()
         {

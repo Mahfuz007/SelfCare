@@ -1,9 +1,10 @@
-﻿using Application.Repositories;
+﻿using Application.Common;
+using Application.Repositories;
 using MediatR;
 
 namespace Application.Features.TaxFeature.GetTaxCalculation
 {
-    public class GetTaxCalculationHandler : IRequestHandler<GetTaxCalculationRequest, GetTaxCalculationResponse>
+    public class GetTaxCalculationHandler : IRequestHandler<GetTaxCalculationRequest, CommonResponse>
     {
         private readonly ITaxRepository _taxRepository;
 
@@ -12,7 +13,7 @@ namespace Application.Features.TaxFeature.GetTaxCalculation
             _taxRepository = taxRepository;
         }
 
-        public Task<GetTaxCalculationResponse> Handle(GetTaxCalculationRequest request, CancellationToken cancellationToken)
+        public Task<CommonResponse> Handle(GetTaxCalculationRequest request, CancellationToken cancellationToken)
         {
             var result = _taxRepository.GetTaxCalculation(request);
             return Task.FromResult(result);

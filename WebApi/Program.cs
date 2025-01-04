@@ -1,6 +1,8 @@
 using Application;
+using Application.Common.Interfaces;
 using Persistence;
 using Persistence.Context;
+using Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,9 @@ builder.Services
       .AddApplication()
       .AddPersistence(builder.Configuration);
 
-
+var rabbitMQService = new RabbitMqService(new List<string> { "SelfCare.debug", "SelfcareCommand" });
+await rabbitMQService.InitializeAsync();
+builder.Services.AddSingleton<IRabbitMqService>(rabbitMQService);
 
 // Add services to the container.
 

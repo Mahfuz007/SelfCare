@@ -2,15 +2,10 @@
 using Application.Repositories;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.ExpenseFeatures.DeleteExpense
 {
-    public class DeleteExpenseHandler : IRequestHandler<DeleteExpenseRequest, bool>
+    public class DeleteExpenseHandler : IRequestHandler<DeleteExpenseRequest, CommonResponse>
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly IValidator<DeleteExpenseRequest> _validator;
@@ -21,10 +16,10 @@ namespace Application.Features.ExpenseFeatures.DeleteExpense
             _validator = validator;
         }
 
-        public async Task<bool> Handle(DeleteExpenseRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> Handle(DeleteExpenseRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-            if (!validationResult.IsValid) throw new BadRequestException(validationResult.ToString());
+            if (!validationResult.IsValid) return new CommonResponse(validationResult);
             return await _expenseRepository.DeleteExpense(request.ExpenseId);
         }
     }

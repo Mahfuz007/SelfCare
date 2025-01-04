@@ -10,8 +10,6 @@ namespace Application.Features.CategoryFeatures.CreateCategory
         {
             _categoryRepository = categoryRepository;
             RuleFor(x => x.Name).NotEmpty().MinimumLength(3).MaximumLength(20);
-            RuleFor(x => x.ItemId).NotEmpty().WithMessage("ItemID can not be empty");
-            RuleFor(x => x.ItemId).MustAsync((ItemId, _) => this.IsCategoryExists(ItemId)).WithMessage("Item Id must be unique");
             RuleFor(x => x.IsExpense).NotNull();
             RuleFor(x => x.IsDefault).NotNull();
         }

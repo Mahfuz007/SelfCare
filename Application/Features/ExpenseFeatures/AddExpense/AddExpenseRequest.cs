@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.Common;
+using MediatR;
 
 namespace Application.Features.ExpenseFeatures.AddExpense
 {
-    public class AddExpenseRequest : IRequest<AddExpenseResponse>
+    public class AddExpenseRequest : IRequest<CommonResponse>
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

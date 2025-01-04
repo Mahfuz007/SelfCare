@@ -1,4 +1,5 @@
-﻿using Application.Features.TaxFeature.GetTaxCalculation;
+﻿using Application.Common;
+using Application.Features.TaxFeature.GetTaxCalculation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetTaxCalculationResponse>> TaxCalculation([FromBody] GetTaxCalculationRequest request, CancellationToken cancellation)
+        public async Task<CommonResponse> TaxCalculation([FromBody] GetTaxCalculationRequest request, CancellationToken cancellation)
         {
             return await _mediator.Send(request, cancellation);
         }

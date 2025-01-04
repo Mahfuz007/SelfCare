@@ -2,15 +2,11 @@
 using Application.Repositories;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Features.ExpenseFeatures.AddExpense
 {
-    public sealed class AddExpenseHandler : IRequestHandler<AddExpenseRequest, AddExpenseResponse>
+    public sealed class AddExpenseHandler : IRequestHandler<AddExpenseRequest, CommonResponse>
     {
         private readonly IValidator<AddExpenseRequest> _validator;
         private readonly IExpenseRepository _expenseRepository;
@@ -20,12 +16,12 @@ namespace Application.Features.ExpenseFeatures.AddExpense
             _expenseRepository = expenseRepository;
         }
 
-        public async Task<AddExpenseResponse> Handle(AddExpenseRequest request, CancellationToken cancellationToken)
+        public async Task<CommonResponse> Handle(AddExpenseRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
-                throw new BadRequestException(validationResult.ToString());
+                return new CommonResponse(validationResult);
             }
 
             return await _expenseRepository.AddExpense(request);

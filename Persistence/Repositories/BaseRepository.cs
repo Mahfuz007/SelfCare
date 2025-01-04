@@ -138,14 +138,22 @@ namespace Persistence.Repositories
             return  _collection.Find(filterExpression).ToList();
         }
 
-        public async Task<List<T>> FindAllAsync(FilterDefinition<T> filterExpression, int pageNo = 0, int pageSize = 100)
-        {
-            return await _collection.Find(filterExpression).Limit(pageSize).Skip(pageNo).ToListAsync();
-        }
-
         public async Task<long> CountDocumentAsync(FilterDefinition<T> filterExpression)
         {
             return await _collection.CountDocumentsAsync(filterExpression);
+        }
+
+        public async Task<List<T>> GetItemsAsync(FilterDefinition<T> filterExpression)
+        {
+            return await _collection.Find(filterExpression).ToListAsync();
+        }
+
+        public async Task<(List<T>, long)> GetItemsWithCountAsync(FilterDefinition<T> filterExpression, int pageNo = 0, int pageSize = 100)
+        {
+            var count = await _collection.CountDocumentsAsync(filterExpression);
+            var data = await _collection.Find(filterExpression).Limit(pageSize).Skip(pageNo).ToListAsync();
+
+            return (data, count);
         }
     }
 }

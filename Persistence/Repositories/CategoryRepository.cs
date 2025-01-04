@@ -1,10 +1,12 @@
-﻿using Application.Features.CategoryFeatures.CreateCategory;
+﻿using Application.Common;
+using Application.Features.CategoryFeatures.CreateCategory;
 using Application.Features.CategoryFeatures.GetCategory;
-using Application.Features.UpdateCategory;
+using Application.Features.CategoryFeatures.UpdateCategory;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
 using MongoDB.Driver;
+using System.Net;
 
 namespace Persistence.Repositories
 {
@@ -24,23 +26,24 @@ namespace Persistence.Repositories
             return result is not null;
         }
 
-        public async Task<CreateCategoryResponse> CreateCategory(CreateCategoryRequest createCategoryRequest)
+        public async Task<CommonResponse> CreateCategory(CreateCategoryRequest createCategoryRequest)
         {
             var category = _mapper.Map<Category>(createCategoryRequest);
+            category.ItemId = Guid.NewGuid().ToString();
             category.CreatedDate = DateTime.UtcNow;
             category.LastModifiedDate = DateTime.UtcNow;
             await _baseRepository.InsertOneAsync(category);
 
-            return _mapper.Map<CreateCategoryResponse>(category);
+            return new CommonResponse(HttpStatusCode.Created,_mapper.Map<CreateCategoryResponse>(category));
         }
 
-        public async Task<bool> DeleteCategory(string categoryId)
+        public async Task<CommonResponse> DeleteCategory(string categoryId)
         {
             await _baseRepository.DeleteByIdAsync(categoryId);
-            return true;
+            return new CommonResponse(HttpStatusCode.OK, "Successfully deleted");
         }
 
-        public async Task<List<GetCategoryResponse>> GetCategory(GetCategoryRequest request)
+        public async Task<CommonResponse> GetCategory(GetCategoryRequest request)
         {
             var filter = Builders<Category>.Filter.Empty;
             if(!string.IsNullOrEmpty(request.CategoryId))
@@ -48,21 +51,21 @@ namespace Persistence.Repositories
                 filter &= Builders<Category>.Filter.Eq(x => x.ItemId, request.CategoryId);
             }
 
-            var categories = await _baseRepository.FindAllAsync(filter, request.PageIndex, request.PageSize);
-            return _mapper.Map<List<GetCategoryResponse>>(categories);
+            var (categories, totalCount) = await _baseRepository.GetItemsWithCountAsync(filter, request.PageIndex, request.PageSize);
+            return new CommonResponse(_mapper.Map<List<GetCategoryResponse>>(categories), totalCount);
         }
 
-        public async Task<UpdateCategoryResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest)
+        public async Task<CommonResponse> UpdateCategory(UpdateCategoryRequest updateCategoryRequest)
         {
             var category = await _baseRepository.FindByIdAsync(updateCategoryRequest.ItemId);
-            if (category == null) return new UpdateCategoryResponse() { Name = "No Category Found for this Item Id" };
+            if (category == null) return new CommonResponse(HttpStatusCode.NotFound, "Please Provide Valid Request");
             category.ItemId = updateCategoryRequest.ItemId;
             category.Name = updateCategoryRequest.Name;
             category.IsDefault = updateCategoryRequest.IsDefault;
             category.IsExpense = updateCategoryRequest.IsExpense;
             category.LastModifiedDate = DateTime.UtcNow;
             await _baseRepository.UpdateOneAsync(category);
-            return _mapper.Map<UpdateCategoryResponse>(category);
+            return new CommonResponse(_mapper.Map<UpdateCategoryResponse>(category));
         }
 
         public async Task<Category> GetSpecificExpenseCategory(Expense expense)

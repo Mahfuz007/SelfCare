@@ -1,18 +1,21 @@
-﻿using Application.Features.ExpenseFeatures.AddExpense;
+﻿using Application.Common;
+using Application.Features.ExpenseFeatures.AddExpense;
 using Application.Features.ExpenseFeatures.GetExpense;
 using Application.Features.ExpenseFeatures.GetTotalExpense;
 using Application.Features.ExpenseFeatures.UpdateExpense;
+using Domain.Entities;
 
 namespace Application.Repositories
 {
     public interface IExpenseRepository
     {
-        Task<AddExpenseResponse> AddExpense(AddExpenseRequest request);
-        Task<List<GetExpenseResponse>> GetExpenses(GetExpenseRequest request);
+        Task<CommonResponse> AddExpense(AddExpenseRequest request);
+        Task<CommonResponse> GetExpenses(GetExpenseRequest request);
         Task<bool> CheckIfExpenseExists(string expenseId);
-        Task<UpdateExpenseResponse> UpdateExpense(UpdateExpenseRequest request);
+        Task<CommonResponse> UpdateExpense(UpdateExpenseRequest request);
         Task<GetExpenseResponse> GetExpenseById(string expenseId);
-        Task<bool> DeleteExpense(string expenseId);
-        Task<GetTotalExpenseResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request);
+        Task<CommonResponse> DeleteExpense(string expenseId);
+        Task<CommonResponse> GetExpenseSummery(GetExpenseSummeryRequest request);
+        Task<CommonResponse> ProcessImportedExpense(IEnumerable<Expense> expenses, string excelName);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.CategoryFeatures.CreateCategory;
-using Application.Features.UpdateCategory;
+using Application.Features.CategoryFeatures.UpdateCategory;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
