@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Features.ExpenseFeatures.GetTotalExpense
 {
-    public class GetTotalExpenseRequest : IRequest<CommonResponse>
+    public class GetExpenseSummeryRequest : IRequest<CommonResponse>
     {
         public string? CreatedBy { get; set; }
         public string? CategoryId { get; set; }

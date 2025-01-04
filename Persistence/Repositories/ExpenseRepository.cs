@@ -71,7 +71,7 @@ namespace Persistence.Repositories
             return _mapper.Map<GetExpenseResponse>(expense);
         }
 
-        public async Task<CommonResponse> GetTotalExpenseAmount(GetTotalExpenseRequest request)
+        public async Task<CommonResponse> GetExpenseSummery(GetExpenseSummeryRequest request)
         {
             var filter = Builders<Expense>.Filter.Empty;
             if (request.CreatedBy is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CreatedBy, request.CreatedBy);
@@ -81,18 +81,22 @@ namespace Persistence.Repositories
                 && request.EndDate.HasValue 
                 && request.EndDate != DateTime.MinValue)
             {
-                filter &= Builders<Expense>.Filter.Where(x => x.CreatedDate >= request.StartDate && x.CreatedDate <= request.EndDate);
+                var dateValue = request.EndDate.Value;
+                var endDate = new DateTime(dateValue.Year, dateValue.Month, dateValue.Day, 23, 59, 59, DateTimeKind.Utc);
+                filter &= Builders<Expense>.Filter.Where(x => x.CreatedDate >= request.StartDate && x.CreatedDate <= endDate);
             }
 
             var expenses = await _baseRepository.FindAllAsync(filter);
-            var totalAmount = 0.0;
+            var totalAmount = expenses.Sum(x => x.Amount);
+            var expenseByCategory = expenses.GroupBy(x => x.CategoryName).ToDictionary(xd => xd.Key, xd => xd.Sum(p => p.Amount));
+            var expensePercentageByCategory = expenses.GroupBy(x => x.CategoryName).ToDictionary(xd => xd.Key, xd => Math.Round((xd.Sum(p => p.Amount) / totalAmount) * 100, 2));
 
-            foreach (var expense in expenses)
+            var response = new GetExpenseSummeryResponse()
             {
-                totalAmount += expense.Amount;
-            }
-
-            var response = new GetTotalExpenseResponse() { Amount = totalAmount };
+                TotalAmount = totalAmount,
+                ExpenseAmountByCategory = expenseByCategory,
+                ExpensePercentageByCategory= expensePercentageByCategory
+            };
 
             return new CommonResponse(response);
         }
