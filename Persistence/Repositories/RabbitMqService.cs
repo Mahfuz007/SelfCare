@@ -17,7 +17,7 @@ namespace Persistence.Repositories
         {
             _connectionFactory = new ConnectionFactory()
             {
-                HostName = "127.0.0.1",
+                HostName = "ecommerce-mq",
                 UserName = "guest",
                 Password = "guest",
                 RequestedConnectionTimeout = TimeSpan.FromSeconds(10)
