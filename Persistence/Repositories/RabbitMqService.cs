@@ -40,55 +40,61 @@ namespace Persistence.Repositories
 
         public async Task InitializeAsync()
         {
-            var connection = await _connectionFactory.CreateConnectionAsync();
-            if(connection is null)
+            try
             {
-                Console.WriteLine("RabbitMq connection couldn't be connected!");
-                return;
-            }
-            _channel = await connection.CreateChannelAsync();
-
-            if(_channel is null)
-            {
-                Console.WriteLine("Channel is Null.RabbitMq connection couldn't be connected!");
-                return;
-            }
-
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += async (sender, ea) =>
-            {
-                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                var commandWrapper = JsonConvert.DeserializeObject<QueueCommandWrapper>(message);
-
-                if (commandWrapper == null)
+                var connection = await _connectionFactory.CreateConnectionAsync();
+                if (connection is null)
                 {
-                    Console.WriteLine("Invalid message received");
+                    Console.WriteLine("RabbitMq connection couldn't be connected!");
+                    return;
+                }
+                _channel = await connection.CreateChannelAsync();
+
+                if (_channel is null)
+                {
+                    Console.WriteLine("Channel is Null.RabbitMq connection couldn't be connected!");
                     return;
                 }
 
-                try
+                var consumer = new AsyncEventingBasicConsumer(_channel);
+                consumer.ReceivedAsync += async (sender, ea) =>
                 {
-                    var commandType = Type.GetType(commandWrapper.CommandName); // Ensure the type is resolvable
-                    if (commandType == null)
-                    {
-                        throw new InvalidOperationException($"Unknown command type: {commandWrapper.CommandName}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error processing message: {ex.Message}");
-                }
-            };
+                    var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+                    var commandWrapper = JsonConvert.DeserializeObject<QueueCommandWrapper>(message);
 
-            foreach (var queue in _requiredQueues)
+                    if (commandWrapper == null)
+                    {
+                        Console.WriteLine("Invalid message received");
+                        return;
+                    }
+
+                    try
+                    {
+                        var commandType = Type.GetType(commandWrapper.CommandName); // Ensure the type is resolvable
+                        if (commandType == null)
+                        {
+                            throw new InvalidOperationException($"Unknown command type: {commandWrapper.CommandName}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error processing message: {ex.Message}");
+                    }
+                };
+
+                foreach (var queue in _requiredQueues)
+                {
+                    await _channel.QueueDeclareAsync(queue: queue,
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+                    Console.WriteLine($"Connected to rabbitMq queue. Queue Name: {queue}", queue);
+                    await _channel.BasicConsumeAsync(queue: queue, autoAck: true, consumer: consumer);
+                }
+            } catch (Exception ex)
             {
-                await _channel.QueueDeclareAsync(queue: queue,
-                                 durable: false,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
-                Console.WriteLine($"Connected to rabbitMq queue. Queue Name: {queue}", queue);
-                await _channel.BasicConsumeAsync(queue: queue, autoAck: true, consumer: consumer);
+                Console.WriteLine("Exception in rabbitMq Connection", JsonConvert.SerializeObject(ex));
             }
 
         }
