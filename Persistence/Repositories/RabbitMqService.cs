@@ -17,7 +17,7 @@ namespace Persistence.Repositories
         {
             _connectionFactory = new ConnectionFactory()
             {
-                HostName = "0.0.0.0",
+                HostName = "selfcare-rabbitmq",
                 UserName = "guest",
                 Password = "guest",
                 RequestedConnectionTimeout = TimeSpan.FromSeconds(10)
