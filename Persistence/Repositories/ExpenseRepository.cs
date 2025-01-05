@@ -76,18 +76,17 @@ namespace Persistence.Repositories
             var filter = Builders<Expense>.Filter.Empty;
             if (request.CreatedBy is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CreatedBy, request.CreatedBy);
             if (request.CategoryId is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CategoryId, request.CategoryId);
-            TimeZoneInfo localZone = TimeZoneInfo.FindSystemTimeZoneById("Bangladesh Standard Time"); // GMT+06
             if (request.StartDate.HasValue && request.StartDate != DateTime.MinValue)
             {
-                DateTime startOfDayLocal = request.StartDate.Value.Date; // Start of the day in local time
-                DateTime startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal, localZone);
+                DateTime startOfDayUtc = request.StartDate.Value.Date.AddHours(-6);
                 filter &= Builders<Expense>.Filter.Gte(x => x.CreatedDate , startOfDayUtc);
             }
 
             if(request.EndDate.HasValue && request.EndDate != DateTime.MinValue)
             {
-                DateTime endOfDayLocal = request.EndDate.Value.AddDays(1).AddTicks(-1); // End of the day in local time
-                DateTime endOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(endOfDayLocal, localZone);
+                var endDateValue = request.EndDate.Value;
+                var endOfDay = new DateTime(endDateValue.Year, endDateValue.Month, endDateValue.Day, 23, 59, 59, DateTimeKind.Utc);
+                DateTime endOfDayUtc = endOfDay.AddHours(-6);
                 filter &= Builders<Expense>.Filter.Lte(x => x.CreatedDate, endOfDayUtc);
             }
 
