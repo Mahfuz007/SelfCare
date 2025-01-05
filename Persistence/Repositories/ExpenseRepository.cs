@@ -28,8 +28,8 @@ namespace Persistence.Repositories
         {
             var expense = _mapper.Map<Expense>(request);
             expense.ItemId = Guid.NewGuid().ToString();
-            expense.CreatedDate = DateTime.UtcNow;
-            expense.LastModifiedDate = DateTime.UtcNow;
+            expense.CreatedDate = DateTime.UtcNow.ToUniversalTime();
+            expense.LastModifiedDate = DateTime.UtcNow.ToUniversalTime();
             await UpdateDescriptionAndCategoryDetails(request.Description, request.Name, expense);
 
             await _baseRepository.InsertOneAsync(expense);
@@ -110,7 +110,8 @@ namespace Persistence.Repositories
             var expense = _mapper.Map<Expense>(request);
             var currData = await this.GetExpenseById(request.ExpenseId);
             expense.CreatedDate = currData.CreatedDate;
-            expense.LastModifiedDate = DateTime.UtcNow;
+            expense.LastModifiedDate = DateTime.UtcNow.ToUniversalTime();
+            expense.ImportedExcelName = currData.ImportedExcelName;
             await UpdateDescriptionAndCategoryDetails(request.Description, request.Name, expense);
             await _baseRepository.ReplaceOneAsync(expense);
             return new CommonResponse(_mapper.Map<UpdateExpenseResponse>(expense));
@@ -136,7 +137,8 @@ namespace Persistence.Repositories
                 expense.ItemId = Guid.NewGuid().ToString();
                 expense.ImportedExcelName = excelName + "_"+ index++;
                 await UpdateDescriptionAndCategoryDetails(description: expense.Description,name: expense.Name,expense: expense);
-                expense.LastModifiedDate= DateTime.UtcNow;
+                expense.CreatedDate = expense.CreatedDate.ToUniversalTime();
+                expense.LastModifiedDate= DateTime.UtcNow.ToUniversalTime();
                 validExpenses.Add(expense);
             }
 

@@ -11,5 +11,6 @@
         public double Amount { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public string CategoryId { get; set; } = string.Empty;
+        public string ImportedExcelName {  get; set; } = string.Empty;
     }
 }
