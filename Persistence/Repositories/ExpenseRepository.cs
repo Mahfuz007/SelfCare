@@ -92,14 +92,29 @@ namespace Persistence.Repositories
 
             var expenses = await _baseRepository.GetItemsAsync(filter);
             var totalAmount = expenses.Sum(x => x.Amount);
-            var expenseByCategory = expenses.GroupBy(x => x.CategoryName).ToDictionary(xd => xd.Key, xd => xd.Sum(p => p.Amount));
-            var expensePercentageByCategory = expenses.GroupBy(x => x.CategoryName).ToDictionary(xd => xd.Key, xd => Math.Round((xd.Sum(p => p.Amount) / totalAmount) * 100, 2));
+            var details = expenses
+                            .GroupBy(x => x.CategoryName)
+                            .ToDictionary(
+                                    xd => xd.Key, 
+                                    xd =>
+                                    {
+                                        var sum = xd.Sum(p => p.Amount);
+                                        var count = xd.Count();
+                                        return new SummeryDetails()
+                                        {
+                                            Total = sum,
+                                            Percentage = Math.Round((sum / totalAmount) * 100, 2),
+                                            Avarage = Math.Round(sum / count, 2),
+                                            Count = count,
+                                            HeightAmount = xd.Max(p => p.Amount)
+                                        };
+                                    }
+                            );
 
             var response = new GetExpenseSummeryResponse()
             {
                 TotalAmount = totalAmount,
-                ExpenseAmountByCategory = expenseByCategory,
-                ExpensePercentageByCategory= expensePercentageByCategory
+                Details = details
             };
 
             return new CommonResponse(response, expenses.Count);
