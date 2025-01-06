@@ -137,7 +137,14 @@ namespace Persistence.Repositories
                 expense.ItemId = Guid.NewGuid().ToString();
                 expense.ImportedExcelName = excelName + "_"+ index++;
                 await UpdateDescriptionAndCategoryDetails(description: expense.Description,name: expense.Name,expense: expense);
-                expense.CreatedDate = expense.CreatedDate.ToUniversalTime();
+                expense.CreatedDate = new DateTime(
+                                            expense.CreatedDate.Year, 
+                                            expense.CreatedDate.Month, 
+                                            expense.CreatedDate.Day, 
+                                            expense.CreatedDate.Hour, 
+                                            expense.CreatedDate.Minute, 
+                                            expense.CreatedDate.Second, 
+                                            DateTimeKind.Unspecified).ToUniversalTime();
                 expense.LastModifiedDate= DateTime.UtcNow.ToUniversalTime();
                 validExpenses.Add(expense);
             }
