@@ -13,6 +13,10 @@ builder.Services
 var rabbitMQService = new RabbitMqService(new List<string> { "SelfCare.debug", "SelfcareCommand" });
 await rabbitMQService.InitializeAsync();
 builder.Services.AddSingleton<IRabbitMqService>(rabbitMQService);
+builder.Services.AddControllers().AddJsonOptions(option =>
+{
+    option.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
 
 // Add services to the container.
 
