@@ -3,6 +3,7 @@ using Application.Common.Interfaces;
 using Persistence;
 using Persistence.Context;
 using Persistence.Repositories;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,14 @@ builder.Services
 var rabbitMQService = new RabbitMqService(new List<string> { "SelfCare.debug", "SelfcareCommand" });
 await rabbitMQService.InitializeAsync();
 builder.Services.AddSingleton<IRabbitMqService>(rabbitMQService);
+builder.Services.AddControllers().AddJsonOptions(option =>
+{
+    option.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
 
 // Add services to the container.
 
@@ -20,6 +29,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSerilog();
 
 var app = builder.Build();
 
