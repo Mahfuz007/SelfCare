@@ -60,6 +60,19 @@ namespace Persistence.Repositories
             {
                 filter &= Builders<Expense>.Filter.Eq(x => x.Name, request.ExpenseName);
             }
+            if (!string.IsNullOrEmpty(request.CategoryName))
+            {
+                filter &= Builders<Expense>.Filter.Eq(x => x.CategoryName, request.CategoryName);
+            }
+            if(request.StartDate != DateTime.MinValue)
+            {
+                filter &= Builders<Expense>.Filter.Gte(x => x.CreatedDate, UtilityService.GetStartOfDayUtc(request.StartDate));
+            }
+            if(request.EndDate != DateTime.MinValue)
+            {
+                filter &= Builders<Expense>.Filter.Lte(x => x.CreatedDate, UtilityService.GetEndOfDayUtc(request.EndDate));
+            }
+
 
             var (expenses, totalCount) = await _baseRepository.GetItemsWithCountAsync(filter, request.PageIndex, request.PageSize);
             return new CommonResponse(expenses, totalCount);
@@ -78,16 +91,12 @@ namespace Persistence.Repositories
             if (request.CategoryId is not null) filter &= Builders<Expense>.Filter.Eq(x => x.CategoryId, request.CategoryId);
             if (request.StartDate.HasValue && request.StartDate != DateTime.MinValue)
             {
-                DateTime startOfDayUtc = request.StartDate.Value.Date.AddHours(-6);
-                filter &= Builders<Expense>.Filter.Gte(x => x.CreatedDate , startOfDayUtc);
+                filter &= Builders<Expense>.Filter.Gte(x => x.CreatedDate , UtilityService.GetStartOfDayUtc(request.StartDate.Value));
             }
 
             if(request.EndDate.HasValue && request.EndDate != DateTime.MinValue)
             {
-                var endDateValue = request.EndDate.Value;
-                var endOfDay = new DateTime(endDateValue.Year, endDateValue.Month, endDateValue.Day, 23, 59, 59, DateTimeKind.Utc);
-                DateTime endOfDayUtc = endOfDay.AddHours(-6);
-                filter &= Builders<Expense>.Filter.Lte(x => x.CreatedDate, endOfDayUtc);
+                filter &= Builders<Expense>.Filter.Lte(x => x.CreatedDate, UtilityService.GetEndOfDayUtc(request.EndDate.Value));
             }
 
             var expenses = await _baseRepository.GetItemsAsync(filter);
