@@ -7,7 +7,7 @@ namespace Domain.Common
         [BsonId]
         public string ItemId { get; set; } = Guid.NewGuid().ToString();
         public string CreatedBy { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime LastModifiedDate { get; set; } = DateTime.UtcNow;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Domain.Entities
 {
+    [BsonCollection("User")]
     public class User : BaseEntity
     {
         public string FirstName { get; set; } = string.Empty;
