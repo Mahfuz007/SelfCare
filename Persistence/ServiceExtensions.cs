@@ -20,6 +20,7 @@ namespace Persistence
             services.AddSingleton<IExpenseRepository, ExpenseRepository>();
             services.AddSingleton<ITaxRepository, TaxRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IInvestmentRepository, InvestmentRepository>();
 
             services.AddSingleton<MongoDbInitializer>(sp =>
             {

@@ -18,11 +18,11 @@ namespace Domain.Entities
         public double FinalReturnAmount { get; set; }
         public string Status { get; set; } = string.Empty;
         public bool IsPaymentCompleted { get; set; }
-        public PaymentDetails FromPaymentDetails { get; set; } = new PaymentDetails();
-        public PaymentDetails ToPaymentDetails { get; set; } = new PaymentDetails();
+        public PaymentDetails? FromPaymentDetails { get; set; }
+        public PaymentDetails? ToPaymentDetails { get; set; }
         public int ReturnInstallmentCount { get; set; }
-        public List<PaymentDetails> ReturnInstallmentDetails { get; set; } = new List<PaymentDetails>();
-        public ConfirmationDetails ConfirmationDetails { get; set; } = new ConfirmationDetails();
+        public List<PaymentDetails>? ReturnInstallmentDetails { get; set; }
+        public ConfirmationDetails? ConfirmationDetails { get; set; }
     }
 
     public class PaymentDetails
