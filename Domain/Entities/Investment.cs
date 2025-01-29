@@ -18,8 +18,8 @@ namespace Domain.Entities
         public double FinalReturnAmount { get; set; }
         public string Status { get; set; } = string.Empty;
         public bool IsPaymentCompleted { get; set; }
-        public PaymentDetails? FromPaymentDetails { get; set; }
-        public PaymentDetails? ToPaymentDetails { get; set; }
+        public PaymentDetails? SenderPaymentDetails { get; set; }
+        public PaymentDetails? ReceiverPaymentDetails { get; set; }
         public int ReturnInstallmentCount { get; set; }
         public List<PaymentDetails>? ReturnInstallmentDetails { get; set; }
         public ConfirmationDetails? ConfirmationDetails { get; set; }
@@ -32,12 +32,11 @@ namespace Domain.Entities
         public string Method { get; set; } = string.Empty;
         public PaymentMethodDetails MethodDetails { get; set; } = new PaymentMethodDetails();
         public string Description { get; set; } = string.Empty;
+        public string TransferType { get; set; } = string.Empty;
     }
 
     public class PaymentMethodDetails
     {
-        public string Name { get; set; } = string.Empty;
-        public string TransferType { get; set; } = string.Empty;
         public string AccountHolderName {  get; set; } = string.Empty;
         public string AccountNo {  get; set; } = string.Empty;
         public string BranchName {  get; set; } = string.Empty;
