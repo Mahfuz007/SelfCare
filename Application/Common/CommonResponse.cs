@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation.Results;
 using System.Net;
 
 namespace Application.Common
@@ -23,7 +23,8 @@ namespace Application.Common
         }
 
         public CommonResponse(ValidationResult validationResult) {
-            Message = validationResult.ErrorMessage;
+            Message = validationResult.ToString();
+            ResponseData = validationResult;
             StatusCode = HttpStatusCode.BadRequest;
         }
 
