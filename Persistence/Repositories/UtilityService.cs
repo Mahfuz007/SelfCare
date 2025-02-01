@@ -4,7 +4,7 @@
     {
         public static DateTime GetStartOfDayUtc(DateTime date)
         {
-            return date.ToUniversalTime();
+            return date.ToUniversalTime().AddHours(-6);
         }
 
         public static DateTime GetEndOfDayUtc(DateTime date)
