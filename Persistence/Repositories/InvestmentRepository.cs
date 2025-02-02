@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Constants;
+using Application.Features.Investments.Approval;
 using Application.Features.Investments.Initiate;
 using Application.Features.Investments.UpdatePayment;
 using Application.Repositories;
@@ -71,9 +72,24 @@ namespace Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<CommonResponse> UpdateApprovalAsync()
+        public async Task<CommonResponse> UpdateApprovalAsync(ApprovalRequest request)
         {
-            throw new NotImplementedException();
+            var investment = await _repository.FindByIdAsync(request.InvestmentId);
+            var confirmationDetails = new ConfirmationDetails()
+            {
+                When = DateTime.UtcNow,
+                InvoiceNo = request.InvoiceNo,
+                Remarks = request.Remarks,
+            };
+
+            investment.ConfirmationDetails = confirmationDetails;
+            investment.ExpectedMatureDate = UtilityService.GetEndOfDayUtc(request.MatureDate);
+            investment.Status = InvestmentConstant.Status.CONFIMED.ToString();
+            investment.StartDate = request.StartDate.ToUniversalTime();
+            investment.LastModifiedDate = DateTime.UtcNow;
+
+            await _repository.UpdateOneAsync(investment);
+            return new CommonResponse(HttpStatusCode.OK, investment);
         }
 
         public Task<CommonResponse> UpdateAsync()

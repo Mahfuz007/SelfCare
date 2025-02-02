@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Features.Investments.Approval;
 using Application.Features.Investments.Initiate;
 using Application.Features.Investments.UpdatePayment;
 
@@ -11,7 +12,7 @@ namespace Application.Repositories
         Task<CommonResponse> DeleteAsync();
         Task<CommonResponse> TerminateAsync();
         Task<CommonResponse> UpdatePaymentAsync(UpdatePaymentRequest request);
-        Task<CommonResponse> UpdateApprovalAsync();
+        Task<CommonResponse> UpdateApprovalAsync(ApprovalRequest request);
         Task<bool> IsApprovedAsync(string id);
         Task<bool> IsPaymentPendingAsync(string id);
         Task<bool> IsExistsAsync(string id);
