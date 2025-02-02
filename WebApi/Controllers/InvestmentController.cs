@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Features.Investments.Approval;
 using Application.Features.Investments.Initiate;
 using Application.Features.Investments.UpdatePayment;
 using MediatR;
@@ -25,6 +26,12 @@ namespace WebApi.Controllers
 
         [HttpPut("update-payment")]
         public async Task<CommonResponse> UpdatePayment([FromBody] UpdatePaymentRequest request)
+        {
+            return await _sender.Send<CommonResponse>(request);
+        }
+
+        [HttpPut("approval")]
+        public async Task<CommonResponse> Approval([FromBody] ApprovalRequest request)
         {
             return await _sender.Send<CommonResponse>(request);
         }

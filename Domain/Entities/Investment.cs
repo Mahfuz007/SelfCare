@@ -23,6 +23,7 @@ namespace Domain.Entities
         public int ReturnInstallmentCount { get; set; }
         public List<PaymentDetails>? ReturnInstallmentDetails { get; set; }
         public ConfirmationDetails? ConfirmationDetails { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.MinValue;
     }
 
     public class PaymentDetails
