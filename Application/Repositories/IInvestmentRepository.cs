@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.Investments.Approval;
+using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.Initiate;
 using Application.Features.Investments.UpdatePayment;
 
@@ -17,5 +18,6 @@ namespace Application.Repositories
         Task<bool> IsPaymentPendingAsync(string id);
         Task<bool> IsExistsAsync(string id);
         Task<string> GetInvestmentStatusAsync(string id);
+        Task<CommonResponse> GetInvenstments(GetInvestmentRequest request);
     }
 }
