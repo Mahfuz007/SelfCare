@@ -1,12 +1,13 @@
 ﻿using Application.Common;
 using Application.Constants;
 using Application.Features.Investments.Approval;
+using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.Initiate;
 using Application.Features.Investments.UpdatePayment;
 using Application.Repositories;
 using Domain.Entities;
+using MongoDB.Driver;
 using System.Net;
-using ZstdSharp.Unsafe;
 
 namespace Persistence.Repositories
 {
@@ -22,6 +23,34 @@ namespace Persistence.Repositories
         public Task<CommonResponse> DeleteAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<CommonResponse> GetInvenstments(GetInvestmentRequest request)
+        {
+            var filter = Builders<Investment>.Filter.Empty;
+            if(!string.IsNullOrEmpty(request.CreatedBy))
+            {
+                filter &= Builders<Investment>.Filter.Eq(x => x.CreatedBy, request.CreatedBy);
+            }
+
+            if(!string.IsNullOrEmpty(request.SearchKey))
+            {
+                filter &= Builders<Investment>.Filter.Eq(x => x.Name, request.SearchKey);
+                filter &= Builders<Investment>.Filter.Eq(x => x.Description, request.SearchKey);
+            }
+
+            if(request.StartDate != default)
+            {
+                filter &= Builders<Investment>.Filter.Gte(x => x.CreatedDate, UtilityService.GetStartOfDayUtc(request.StartDate));
+            }
+
+            if(request.EndDate != default)
+            {
+                filter &= Builders<Investment>.Filter.Lte(x => x.CreatedDate, UtilityService.GetEndOfDayUtc(request.EndDate));
+            }
+
+            var (investments, totalCount) = await _repository.GetItemsWithCountAsync(filter, request.PageIndex, request.PageSize);
+            return new CommonResponse(investments, totalCount);
         }
 
         public async Task<string> GetInvestmentStatusAsync(string id)

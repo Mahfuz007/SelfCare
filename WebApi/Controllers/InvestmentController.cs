@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Features.Investments.Approval;
+using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.Initiate;
 using Application.Features.Investments.UpdatePayment;
 using MediatR;
@@ -16,6 +17,12 @@ namespace WebApi.Controllers
         public InvestmentController(ISender sender)
         {
             _sender = sender;
+        }
+
+        [HttpGet]
+        public async Task<CommonResponse> GetInvestments([FromQuery]GetInvestmentRequest request)
+        {
+            return await _sender.Send(request);
         }
 
         [HttpPost]
