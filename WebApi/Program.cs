@@ -37,6 +37,7 @@ using (var scope = app.Services.CreateScope())
 {
     var mongoDbInitializer = scope.ServiceProvider.GetRequiredService<MongoDbInitializer>();
     await mongoDbInitializer.InitializeIndexesAsync();
+    await mongoDbInitializer.MigrateAsync();
 }
 
 // Configure the HTTP request pipeline.
