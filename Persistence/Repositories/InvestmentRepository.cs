@@ -69,7 +69,6 @@ namespace Persistence.Repositories
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
                 SourceName = request.SourceName,
-                Amount = request.Amount,
                 ExpectedMatureDate = DateTime.UtcNow.AddMonths(request.DurationInMonths),
                 DurationInMonths = request.DurationInMonths,
                 MaximumRoiDeclaredInPercentage = request.MaximumRoiDeclaredInPercentage,
