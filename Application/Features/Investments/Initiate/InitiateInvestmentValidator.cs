@@ -11,7 +11,6 @@ namespace Application.Features.Investments.Initiate
             RuleFor(x => x.DurationInMonths).GreaterThan(0);
             RuleFor(x => x.SourceName).NotEmpty();
             RuleFor(x => x.ReturnInstallmentCount).GreaterThan(0);
-            RuleFor(x => x.Amount).GreaterThan(0);
             RuleFor(x => x.MaximumRoiDeclaredInPercentage).GreaterThan(0);
         }
     }

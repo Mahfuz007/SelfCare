@@ -9,6 +9,7 @@ namespace Domain.Entities
         public string Description { get; set; } = string.Empty;
         public string SourceName { get; set; } = string.Empty;
         public double Amount { get; set; }
+        public int UnitCount { get; set; }
         public DateTime ExpectedMatureDate { get; set; } = DateTime.MinValue;
         public DateTime FinalMatureDate { get; set; } = DateTime.MinValue;
         public int DurationInMonths { get; set; } 
@@ -18,29 +19,12 @@ namespace Domain.Entities
         public double FinalReturnAmount { get; set; }
         public string Status { get; set; } = string.Empty;
         public bool IsPaymentCompleted { get; set; }
-        public PaymentDetails? SenderPaymentDetails { get; set; }
-        public PaymentDetails? ReceiverPaymentDetails { get; set; }
+        public List<PurchaseInfo> PurchaseInfos { get; set; } = new();
         public int ReturnInstallmentCount { get; set; }
-        public List<PaymentDetails>? ReturnInstallmentDetails { get; set; }
+        public List<ReturnDetails> ReturnInstallmentDetails { get; set; } = new();
         public ConfirmationDetails? ConfirmationDetails { get; set; }
         public DateTime StartDate { get; set; } = DateTime.MinValue;
-    }
-
-    public class PaymentDetails
-    {
-        public double Amount { get; set; }
-        public DateTime When { get; set; } 
-        public string Method { get; set; } = string.Empty;
-        public PaymentMethodDetails MethodDetails { get; set; } = new PaymentMethodDetails();
-        public string Description { get; set; } = string.Empty;
-        public string TransferType { get; set; } = string.Empty;
-    }
-
-    public class PaymentMethodDetails
-    {
-        public string AccountHolderName {  get; set; } = string.Empty;
-        public string AccountNo {  get; set; } = string.Empty;
-        public string BranchName {  get; set; } = string.Empty;
+        public string PreviousInvestmentId { get; set; } = string.Empty; 
     }
 
     public class ConfirmationDetails
@@ -49,4 +33,24 @@ namespace Domain.Entities
         public string Remarks {  get; set; } = string.Empty;
         public string InvoiceNo {  get; set; } = string.Empty;
     }
+
+    public class PurchaseInfo
+    {
+        public DateTime When { get; set; }
+        public double UnitPrice { get; set; }
+        public int UnitCount { get; set; }
+        public double Amount { get; set; }
+        public double Charge { get; set; }
+        public string Remarks { get; set; } = string.Empty;
+        public string InvoiceNo { get; set;} = string.Empty;
+    }
+
+    public class ReturnDetails
+    {
+        public DateTime When { get; set; }
+        public string Remarks { get; set; } = string.Empty;
+        public double Amount { get; set; }
+        public string FiscalYear { get; set; } = string.Empty;
+    }
+
 }

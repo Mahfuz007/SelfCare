@@ -1,9 +1,9 @@
 ﻿using Application.Common;
 using Application.Constants;
+using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.Initiate;
-using Application.Features.Investments.UpdatePayment;
 using Application.Repositories;
 using Domain.Entities;
 using MongoDB.Driver;
@@ -69,7 +69,6 @@ namespace Persistence.Repositories
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
                 SourceName = request.SourceName,
-                Amount = request.Amount,
                 ExpectedMatureDate = DateTime.UtcNow.AddMonths(request.DurationInMonths),
                 DurationInMonths = request.DurationInMonths,
                 MaximumRoiDeclaredInPercentage = request.MaximumRoiDeclaredInPercentage,
@@ -113,7 +112,7 @@ namespace Persistence.Repositories
 
             investment.ConfirmationDetails = confirmationDetails;
             investment.ExpectedMatureDate = UtilityService.GetEndOfDayUtc(request.MatureDate);
-            investment.Status = InvestmentConstant.Status.CONFIMED.ToString();
+            investment.Status = InvestmentConstant.Status.INPROGRESS.ToString();
             investment.StartDate = request.StartDate.ToUniversalTime();
             investment.LastModifiedDate = DateTime.UtcNow;
 
@@ -125,53 +124,40 @@ namespace Persistence.Repositories
         {
             throw new NotImplementedException();
         }
-
-        public async Task<CommonResponse> UpdatePaymentAsync(UpdatePaymentRequest request)
+        public async Task<CommonResponse> AddPurchaseInfo(AddPurchaseInfoRequest request)
         {
             var investment = await _repository.FindByIdAsync(request.InvestmentId);
-            if(investment is null) { 
+            if (investment is null)
+            {
                 return new CommonResponse(HttpStatusCode.NotFound, "Provide Valid Information");
             }
 
-            var senderInfo = new PaymentDetails
+            var paymentInfo = new PurchaseInfo
             {
                 Amount = request.Amount,
                 When = DateTime.UtcNow,
-                Method = request.Method,
-                MethodDetails = new PaymentMethodDetails
-                {
-                    AccountHolderName = request.SenderName,
-                    AccountNo = request.SenderAccountNumber,
-                    BranchName = request.SenderBranchName
-                },
-                TransferType = request.Way
+                UnitCount = request.UnitCount,
+                UnitPrice = request.UnitPrice,
+                Charge = request.Charge,
+                InvoiceNo = request.InvoiceNo,
+                Remarks = request.Remarks,
             };
 
-            var receiverInfo = new PaymentDetails
+            investment.Amount = investment.Amount + request.Amount + request.Charge;
+            investment.UnitCount = investment.UnitCount + request.UnitCount;
+            investment.PurchaseInfos.Add(paymentInfo);
+            investment.IsPaymentCompleted = true;
+
+            if(investment.Status == InvestmentConstant.Status.INITIATED.ToString())
             {
-                Amount = request.Amount,
-                When = DateTime.UtcNow,
-                Method = request.Method,
-                MethodDetails = new PaymentMethodDetails
-                {
-                    AccountHolderName = request.ReceiverName,
-                    AccountNo = request.ReceiverAccountNumber,
-                    BranchName = request.ReceiverBranchName
-                },
-                TransferType = request.Way
-            };
-
-            investment.Amount = request.Amount;
-            investment.IsPaymentCompleted = true;
-            investment.SenderPaymentDetails = senderInfo;
-            investment.ReceiverPaymentDetails = receiverInfo;
-            investment.IsPaymentCompleted = true;
-            investment.Status = InvestmentConstant.Status.PAID.ToString();
+                investment.Status = InvestmentConstant.Status.PAID.ToString();
+            }
             investment.LastModifiedDate = DateTime.UtcNow;
 
             await _repository.UpdateOneAsync(investment);
 
             return new CommonResponse(HttpStatusCode.OK, investment);
+
         }
     }
 }

@@ -8,7 +8,8 @@
             PAID,
             CONFIMED,
             COMPLETED,
-            CLOSED
+            CLOSED,
+            INPROGRESS,
         }
     }
 }

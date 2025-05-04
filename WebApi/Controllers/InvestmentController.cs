@@ -1,8 +1,8 @@
 ﻿using Application.Common;
+using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.Initiate;
-using Application.Features.Investments.UpdatePayment;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,8 +31,8 @@ namespace WebApi.Controllers
             return await _sender.Send<CommonResponse>(request);
         }
 
-        [HttpPut("update-payment")]
-        public async Task<CommonResponse> UpdatePayment([FromBody] UpdatePaymentRequest request)
+        [HttpPut("add-purchase-info")]
+        public async Task<CommonResponse> UpdatePayment([FromBody] AddPurchaseInfoRequest request)
         {
             return await _sender.Send<CommonResponse>(request);
         }
