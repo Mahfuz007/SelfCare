@@ -112,7 +112,7 @@ namespace Persistence.Repositories
 
             investment.ConfirmationDetails = confirmationDetails;
             investment.ExpectedMatureDate = UtilityService.GetEndOfDayUtc(request.MatureDate);
-            investment.Status = InvestmentConstant.Status.CONFIMED.ToString();
+            investment.Status = InvestmentConstant.Status.INPROGRESS.ToString();
             investment.StartDate = request.StartDate.ToUniversalTime();
             investment.LastModifiedDate = DateTime.UtcNow;
 
@@ -143,7 +143,7 @@ namespace Persistence.Repositories
                 Remarks = request.Remarks,
             };
 
-            investment.Amount = investment.Amount + request.Amount;
+            investment.Amount = investment.Amount + request.Amount + request.Charge;
             investment.UnitCount = investment.UnitCount + request.UnitCount;
             investment.PurchaseInfos.Add(paymentInfo);
             investment.IsPaymentCompleted = true;
