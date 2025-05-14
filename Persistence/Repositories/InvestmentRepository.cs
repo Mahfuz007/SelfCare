@@ -137,13 +137,13 @@ namespace Persistence.Repositories
                 Amount = request.Amount,
                 When = DateTime.UtcNow,
                 UnitCount = request.UnitCount,
-                UnitPrice = request.UnitPrice,
-                Charge = request.Charge,
+                UnitPrice = Math.Round(request.UnitPrice, 4),
+                Charge = Math.Round(request.Charge),
                 InvoiceNo = request.InvoiceNo,
                 Remarks = request.Remarks,
             };
 
-            investment.Amount = investment.Amount + request.Amount + request.Charge;
+            investment.Amount = Math.Round(investment.Amount + request.Amount + request.Charge, 4);
             investment.UnitCount = investment.UnitCount + request.UnitCount;
             investment.PurchaseInfos.Add(paymentInfo);
             investment.IsPaymentCompleted = true;
