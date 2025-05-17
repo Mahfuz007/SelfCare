@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
@@ -19,5 +20,6 @@ namespace Application.Repositories
         Task<string> GetInvestmentStatusAsync(string id);
         Task<CommonResponse> GetInvenstments(GetInvestmentRequest request);
         Task<CommonResponse> AddPurchaseInfo(AddPurchaseInfoRequest request);
+        Task<CommonResponse> AddReturnInfo(AddReturnRequest request);
     }
 }

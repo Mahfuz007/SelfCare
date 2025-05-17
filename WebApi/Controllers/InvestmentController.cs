@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
@@ -39,6 +40,12 @@ namespace WebApi.Controllers
 
         [HttpPut("approval")]
         public async Task<CommonResponse> Approval([FromBody] ApprovalRequest request)
+        {
+            return await _sender.Send<CommonResponse>(request);
+        }
+
+        [HttpPut("add-return")]
+        public async Task<CommonResponse> AddReturn([FromBody] AddReturnRequest request)
         {
             return await _sender.Send<CommonResponse>(request);
         }
