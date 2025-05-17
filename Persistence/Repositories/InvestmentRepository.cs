@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Constants;
+using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
@@ -158,6 +159,28 @@ namespace Persistence.Repositories
 
             return new CommonResponse(HttpStatusCode.OK, investment);
 
+        }
+
+        public async Task<CommonResponse> AddReturnInfo(AddReturnRequest request)
+        {
+            var returnDetails = new ReturnDetails()
+            {
+                When = DateTime.UtcNow,
+                Amount = Math.Round(request.Amount, 4),
+                Remarks = request.Remarks,
+                FiscalYear = !string.IsNullOrEmpty(request.year) ? request.year : DateTime.UtcNow.Year.ToString(),
+            };
+
+            var investment = await _repository.FindByIdAsync(request.InvestmentId);
+            if (investment.ReturnInstallmentDetails is null)
+            {
+                investment.ReturnInstallmentDetails = new List<ReturnDetails> { returnDetails };
+            }
+            else investment.ReturnInstallmentDetails.Add(returnDetails);
+            investment.LastModifiedDate = DateTime.UtcNow;
+
+            await _repository.UpdateOneAsync(investment);
+            return new CommonResponse(HttpStatusCode.OK, investment);
         }
     }
 }
