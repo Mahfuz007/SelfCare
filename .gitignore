@@ -453,3 +453,74 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+##
+## Docker
+##
+.dockerignore
+Dockerfile.prod
+docker-compose.override.yml
+docker-compose.prod.yml
+
+##
+## Environment and Configuration
+##
+appsettings.*.json
+!appsettings.json
+!appsettings.Example.json
+*.env
+*.env.local
+*.env.development
+*.env.production
+
+##
+## Logs
+##
+*.log
+logs/
+Logs/
+
+##
+## Database
+##
+*.db
+*.sqlite
+*.sqlite3
+
+##
+## Test Results
+##
+TestResults/
+test-results/
+coverage/
+*.coverage
+*.coveragexml
+
+##
+## Temporary Files
+##
+*.tmp
+*.temp
+temp/
+Temp/
+
+##
+## IDE and Editor
+##
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+##
+## OS Generated Files
+##
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
