@@ -3,6 +3,8 @@ using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
+using Application.Features.Investments.GetInvestmentById;
+using Application.Features.Investments.GetPortfolioMetrics;
 using Application.Features.Investments.Initiate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +24,19 @@ namespace WebApi.Controllers
 
         [HttpGet]
         public async Task<CommonResponse> GetInvestments([FromQuery]GetInvestmentRequest request)
+        {
+            return await _sender.Send(request);
+        }
+
+        [HttpGet("{investmentId}")]
+        public async Task<CommonResponse> GetInvestmentById(string investmentId)
+        {
+            var request = new GetInvestmentByIdRequest { InvestmentId = investmentId };
+            return await _sender.Send(request);
+        }
+
+        [HttpGet("portfolio-metrics")]
+        public async Task<CommonResponse> GetPortfolioMetrics([FromQuery]GetPortfolioMetricsRequest request)
         {
             return await _sender.Send(request);
         }

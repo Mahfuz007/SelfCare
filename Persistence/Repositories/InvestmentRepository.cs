@@ -4,6 +4,8 @@ using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
 using Application.Features.Investments.GetInvestments;
+using Application.Features.Investments.GetInvestmentById;
+using Application.Features.Investments.GetPortfolioMetrics;
 using Application.Features.Investments.Initiate;
 using Application.Repositories;
 using Domain.Entities;
@@ -181,6 +183,92 @@ namespace Persistence.Repositories
 
             await _repository.UpdateOneAsync(investment);
             return new CommonResponse(HttpStatusCode.OK, investment);
+        }
+
+        public async Task<CommonResponse> GetPortfolioMetrics(GetPortfolioMetricsRequest request)
+        {
+            var filter = Builders<Investment>.Filter.Empty;
+
+            if (request.StartDate != default)
+            {
+                filter &= Builders<Investment>.Filter.Gte(x => x.CreatedDate, UtilityService.GetStartOfDayUtc(request.StartDate));
+            }
+
+            if (request.EndDate != default)
+            {
+                filter &= Builders<Investment>.Filter.Lte(x => x.CreatedDate, UtilityService.GetEndOfDayUtc(request.EndDate));
+            }
+
+            if (!string.IsNullOrEmpty(request.InvestmentType))
+            {
+                filter &= Builders<Investment>.Filter.Eq(x => x.SourceName, request.InvestmentType);
+            }
+
+            if (!request.IncludeInactive)
+            {
+                filter &= Builders<Investment>.Filter.Ne(x => x.Status, InvestmentConstant.Status.CLOSED.ToString());
+            }
+
+            var investments = await _repository.GetItemsAsync(filter);
+
+            
+
+            // Calculate portfolio summary
+            var totalInvested = investments.Sum(x => x.Amount);
+            var totalItem = investments.Count(x => x.Status != InvestmentConstant.Status.CLOSED.ToString());
+            var currentItem = investments.Count(x =>
+                                                    x.Status == InvestmentConstant.Status.CONFIMED.ToString()
+                                                    || x.Status == InvestmentConstant.Status.INPROGRESS.ToString());
+            var currentValue = investments.Where(x =>
+                                                    x.Status == InvestmentConstant.Status.CONFIMED.ToString()
+                                                    || x.Status == InvestmentConstant.Status.INPROGRESS.ToString()).Sum(x => x.Amount);
+
+            var earnedAmount = investments.Sum( x => x.ReturnInstallmentDetails.Sum(y => y.Amount));
+
+            var portfolioMetrics = new GetPortfolioMetricsResponse()
+            {
+                CurrentInvestedAmount = currentValue,
+                CurrentInvestedItem = currentItem,
+                TotalInvestedAmount = totalInvested,
+                TotalInvestedItem = totalItem,
+                EarnedAmount = earnedAmount,
+            };
+
+            return new CommonResponse(portfolioMetrics);
+        }
+
+        public async Task<GetInvestmentByIdResponse?> GetInvestmentById(string investmentId)
+        {
+            var investment = await _repository.FindByIdAsync(investmentId);
+            
+            if (investment == null)
+            {
+                return null;
+            }
+
+            return new GetInvestmentByIdResponse
+            {
+                InvestmentId = investment.ItemId,
+                Name = investment.Name,
+                Description = investment.Description,
+                SourceName = investment.SourceName,
+                Status = investment.Status,
+                Amount = investment.Amount,
+                UnitCount = investment.UnitCount,
+                UnitPrice = investment.PurchaseInfos.Any() ? investment.PurchaseInfos.First().UnitPrice : 0,
+                DurationInMonths = investment.DurationInMonths,
+                MaximumRoiDeclaredInPercentage = investment.MaximumRoiDeclaredInPercentage,
+                ReturnInstallmentCount = investment.ReturnInstallmentCount,
+                CreatedDate = investment.CreatedDate,
+                LastModifiedDate = investment.LastModifiedDate,
+                StartDate = investment.StartDate != DateTime.MinValue ? investment.StartDate : null,
+                ExpectedMatureDate = investment.ExpectedMatureDate != DateTime.MinValue ? investment.ExpectedMatureDate : null,
+                IsPaymentCompleted = investment.IsPaymentCompleted,
+                CreatedBy = investment.CreatedBy,
+                ConfirmationDetails = investment.ConfirmationDetails,
+                PurchaseInfos = investment.PurchaseInfos,
+                ReturnInstallmentDetails = investment.ReturnInstallmentDetails
+            };
         }
     }
 }
