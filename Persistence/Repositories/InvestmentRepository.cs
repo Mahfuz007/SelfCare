@@ -224,7 +224,7 @@ namespace Persistence.Repositories
                                                     x.Status == InvestmentConstant.Status.CONFIMED.ToString()
                                                     || x.Status == InvestmentConstant.Status.INPROGRESS.ToString()).Sum(x => x.Amount);
 
-            var earnedAmount = investments.Sum( x => x.ReturnInstallmentDetails.Sum(y => y.Amount));
+            var earnedAmount = investments.Sum( x => x?.ReturnInstallmentDetails?.Sum(y => y.Amount) ?? 0);
 
             var portfolioMetrics = new GetPortfolioMetricsResponse()
             {
