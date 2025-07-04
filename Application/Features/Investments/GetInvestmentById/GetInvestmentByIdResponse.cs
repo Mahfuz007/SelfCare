@@ -24,5 +24,9 @@ namespace Application.Features.Investments.GetInvestmentById
         public ConfirmationDetails? ConfirmationDetails { get; set; }
         public List<PurchaseInfo> PurchaseInfos { get; set; } = new();
         public List<ReturnDetails> ReturnInstallmentDetails { get; set; } = new();
+        public double FinalProfitAmount { get; set; }
+        public double FinalProfitPercentage { get; set; }
+        public DateTime? FinalMatureDate { get; set; }
+        public double FinalReturnAmount { get; set; }
     }
 } 

@@ -268,7 +268,11 @@ namespace Persistence.Repositories
                 CreatedBy = investment.CreatedBy,
                 ConfirmationDetails = investment.ConfirmationDetails,
                 PurchaseInfos = investment.PurchaseInfos,
-                ReturnInstallmentDetails = investment.ReturnInstallmentDetails
+                ReturnInstallmentDetails = investment.ReturnInstallmentDetails,
+                FinalProfitAmount = investment.FinalProfitAmount,
+                FinalProfitPercentage = investment.FinalProfitPercentage,
+                FinalMatureDate = investment.FinalMatureDate,
+                FinalReturnAmount = investment.FinalReturnAmount
             };
         }
 
