@@ -2,6 +2,7 @@
 using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
+using Application.Features.Investments.Complete;
 using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.GetInvestmentById;
 using Application.Features.Investments.GetPortfolioMetrics;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("Inventment")]
+    [Route("Investment")]
     public class InvestmentController : ControllerBase
     {
         private readonly ISender _sender;
@@ -61,6 +62,12 @@ namespace WebApi.Controllers
 
         [HttpPut("add-return")]
         public async Task<CommonResponse> AddReturn([FromBody] AddReturnRequest request)
+        {
+            return await _sender.Send<CommonResponse>(request);
+        }
+
+        [HttpPut("complete")]
+        public async Task<CommonResponse> Complete([FromBody] CompleteInvestmentRequest request)
         {
             return await _sender.Send<CommonResponse>(request);
         }

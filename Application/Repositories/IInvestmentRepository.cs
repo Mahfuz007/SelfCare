@@ -2,6 +2,7 @@
 using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
+using Application.Features.Investments.Complete;
 using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.GetInvestmentById;
 using Application.Features.Investments.GetPortfolioMetrics;
@@ -24,6 +25,7 @@ namespace Application.Repositories
         Task<CommonResponse> AddPurchaseInfo(AddPurchaseInfoRequest request);
         Task<CommonResponse> AddReturnInfo(AddReturnRequest request);
         Task<CommonResponse> GetPortfolioMetrics(GetPortfolioMetricsRequest request);
+        Task<CommonResponse> CompleteAsync(CompleteInvestmentRequest request);
         Task<GetInvestmentByIdResponse?> GetInvestmentById(string investmentId);
     }
 }

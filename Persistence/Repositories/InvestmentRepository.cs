@@ -3,6 +3,7 @@ using Application.Constants;
 using Application.Features.Investments.AddProfits;
 using Application.Features.Investments.AddPurchaseInfo;
 using Application.Features.Investments.Approval;
+using Application.Features.Investments.Complete;
 using Application.Features.Investments.GetInvestments;
 using Application.Features.Investments.GetInvestmentById;
 using Application.Features.Investments.GetPortfolioMetrics;
@@ -141,7 +142,7 @@ namespace Persistence.Repositories
                 When = DateTime.UtcNow,
                 UnitCount = request.UnitCount,
                 UnitPrice = Math.Round(request.UnitPrice, 4),
-                Charge = Math.Round(request.Charge),
+                Charge = Math.Round(request.Charge, 4),
                 InvoiceNo = request.InvoiceNo,
                 Remarks = request.Remarks,
             };
@@ -269,6 +270,21 @@ namespace Persistence.Repositories
                 PurchaseInfos = investment.PurchaseInfos,
                 ReturnInstallmentDetails = investment.ReturnInstallmentDetails
             };
+        }
+
+        public async Task<CommonResponse> CompleteAsync(CompleteInvestmentRequest request)
+        {
+            var investment = await _repository.FindByIdAsync(request.InvestmentId);
+
+            investment.FinalReturnAmount = Math.Round(investment.ReturnInstallmentDetails.Sum(x => x.Amount), 4);
+            investment.FinalProfitAmount = Math.Round(investment.FinalReturnAmount-investment.Amount, 4);
+            investment.FinalProfitPercentage = Math.Round(investment.FinalProfitAmount / investment.Amount * 100, 4);
+            investment.FinalMatureDate = DateTime.UtcNow;
+            investment.Status = InvestmentConstant.Status.COMPLETED.ToString();
+            investment.LastModifiedDate = DateTime.UtcNow;
+
+            await _repository.UpdateOneAsync(investment);
+            return new CommonResponse(HttpStatusCode.OK, investment);
         }
     }
 }
