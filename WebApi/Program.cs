@@ -25,10 +25,10 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost4200",
+    options.AddPolicy("AllowLocalhost6007",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200")
+            policy.WithOrigins("http://localhost:6007")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -60,7 +60,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowLocalhost4200");
+app.UseCors("AllowLocalhost6007");
 
 app.UseAuthorization();
 
